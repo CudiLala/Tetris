@@ -1,0 +1,131 @@
+.mobileMainHeaderNav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.8rem 1.5rem;
+  justify-content: center;
+  position: relative;
+}
+.mobileMainHeaderNav a.active {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.mobileMainHeaderNav .menu {
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  display: flex;
+  left: 1.5rem;
+  width: 3rem;
+  height: 2rem;
+}
+.mobileMainHeaderNav .menu:not(.active) .off {
+  visibility: visible;
+  opacity: 1;
+}
+.mobileMainHeaderNav .menu:not(.active) .on {
+  visibility: hidden;
+  opacity: 0;
+}
+.mobileMainHeaderNav .menu.active .on {
+  visibility: visible;
+  opacity: 1;
+}
+.mobileMainHeaderNav .menu.active .off {
+  visibility: hidden;
+  opacity: 0;
+}
+.mobileMainHeaderNav .menu div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  justify-content: center;
+  transition: all 500ms;
+}
+.mobileMainHeaderNav .menu span {
+  display: flex;
+  width: 100%;
+  height: 0.4rem;
+  background-color: var(--color-text-one);
+  border-radius: 0.4rem;
+}
+.mobileMainHeaderNav .menu .off span:not(:last-child) {
+  margin-bottom: 0.4rem;
+}
+.mobileMainHeaderNav .menu .on span {
+  position: absolute;
+}
+.mobileMainHeaderNav .menu .on span:first-child {
+  transform: rotate(45deg);
+  backface-visibility: hidden;
+}
+.mobileMainHeaderNav .menu .on span:last-child {
+  transform: rotate(135deg);
+  backface-visibility: hidden;
+}
+.mobileMainHeaderNav .showcase {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 5rem;
+  transition: all 500ms;
+  width: calc(100% - 3rem);
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 3px var(--color-text-one);
+}
+.mobileMainHeaderNav .menu:not(.active) ~ .showcase {
+  visibility: hidden;
+  opacity: 0;
+}
+.mobileMainHeaderNav .showcase a {
+  padding: 0.8rem;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 0 3px var(--color-text-one);
+  border-radius: 0.4rem;
+}
+.mobileMainHeaderNav .showcase a:not(:last-child) {
+  margin-bottom: 1rem;
+}
+.mobileMainHeaderNav .showcase a.active {
+  box-shadow: 0 0 3px var(--color-primary-two);
+  color: var(--color-primary-two);
+}
+
+.desktopMainHeaderNav {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0.8rem 0;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+}
+.desktopMainHeaderNav a {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding: 0 1.5rem;
+  transition: all 300ms;
+}
+.desktopMainHeaderNav a.active {
+  color: var(--color-primary-two);
+}
+.desktopMainHeaderNav a:hover {
+  color: var(--color-primary-three);
+}
+
+@media screen and (min-width: 600px) {
+  .mobileMainHeaderNav {
+    display: none;
+  }
+  .desktopMainHeaderNav {
+    display: flex;
+  }
+}
