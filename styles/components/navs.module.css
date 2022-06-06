@@ -7,10 +7,11 @@
   justify-content: center;
   position: relative;
 }
-.mobileMainHeaderNav a.active {
+.mobileMainHeaderNav > a.active {
   height: 100%;
   display: flex;
   align-items: center;
+  font-size: 1.6rem;
 }
 .mobileMainHeaderNav .menu {
   border: none;
