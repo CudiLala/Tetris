@@ -29,7 +29,7 @@
 
 .bestToday {
   width: 100%;
-  background-color: var(--color-green-glass-one);
+  background-color: var(--color-white-glass-one);
   border-radius: 0.4rem;
 }
 .bestToday .header {
