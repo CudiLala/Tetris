@@ -1,17 +1,21 @@
 import styles from "styles/components/navs.module.css";
 import Anchor from "components/anchors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Logo } from "components/icons";
+import { useRouter } from "next/router";
 
 export function DesktopMainHeaderNav() {
   return (
     <nav className={styles.desktopMainHeaderNav}>
       <div className={styles.left}>
-        <Anchor href="/">Logo</Anchor>
+        <Anchor passProps={{ className: styles.logo }} href="/">
+          <Logo />
+        </Anchor>
       </div>
       <div className={styles.right}>
-        <Anchor>Statistics</Anchor>
-        <Anchor>Information</Anchor>
-        <Anchor>Sign in</Anchor>
+        <Anchor href="/stats">Statistics</Anchor>
+        <Anchor href="/info">Information</Anchor>
+        <Anchor href="/in">Sign in</Anchor>
       </div>
     </nav>
   );
@@ -19,13 +23,20 @@ export function DesktopMainHeaderNav() {
 
 export function MobileMainHeaderNav() {
   const [disp, setDisp] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", () => setDisp(false));
+    () => router.events.off("routeChangeStart", () => setDisp(false));
+  }, [router]);
+
   return (
     <nav className={styles.mobileMainHeaderNav}>
       <Menu disp={disp} setDisp={setDisp} />
       <ShowCase disp={disp} setDisp={setDisp} />
-      <div className={styles.logo}>
-        <Anchor href="/">Logo</Anchor>
-      </div>
+      <Anchor passProps={{ className: styles.logo }} href="/">
+        <Logo />
+      </Anchor>
     </nav>
   );
 }
@@ -53,21 +64,23 @@ function ShowCase({ disp, setDisp }: dispState) {
     >
       <div className={`${styles.panelContainer}`}>
         <div
-          className={`${styles.panel} noScrollBar`}
+          className={`${styles.panel} `}
           onClick={(ev) => ev.stopPropagation()}
         >
           <div className={styles.header}>
-            <div className={styles.logo}>Logo</div>
+            <Anchor passProps={{ className: styles.logo }} href="/">
+              <Logo />
+            </Anchor>
             <button className={styles.close} onClick={() => setDisp(false)}>
               <span></span>
               <span></span>
             </button>
           </div>
           <div className={styles.spacer} />
-          <div className={styles.anchorContainer}>
-            <Anchor>Statistics</Anchor>
-            <Anchor>Information</Anchor>
-            <Anchor>Sign in</Anchor>
+          <div className={`${styles.anchorContainer} noScrollBar`}>
+            <Anchor href="/stats">Statistics</Anchor>
+            <Anchor href="/info">Information</Anchor>
+            <Anchor href="/in">Sign in</Anchor>
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppPropsX) {
     <>
       <Head>
         <title>Tetris: An app by Augustine</title>
-        <link rel="icon" href="/tetris.png" />
+        <link rel="icon" href="/tetris.svg" />
       </Head>
       <App>
         <Layout {...Component.LayoutProps}>
