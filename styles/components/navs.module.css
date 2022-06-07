@@ -1,132 +1,153 @@
-.mobileMainHeaderNav {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0.8rem 1.5rem;
-  justify-content: center;
-  position: relative;
-}
-.mobileMainHeaderNav > a.active {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  font-size: 1.6rem;
-}
-.mobileMainHeaderNav .menu {
-  border: none;
-  background-color: transparent;
-  position: absolute;
-  display: flex;
-  left: 1.5rem;
-  width: 3rem;
-  height: 2rem;
-}
-.mobileMainHeaderNav .menu:not(.active) .off {
-  visibility: visible;
-  opacity: 1;
-}
-.mobileMainHeaderNav .menu:not(.active) .on {
-  visibility: hidden;
-  opacity: 0;
-}
-.mobileMainHeaderNav .menu.active .on {
-  visibility: visible;
-  opacity: 1;
-}
-.mobileMainHeaderNav .menu.active .off {
-  visibility: hidden;
-  opacity: 0;
-}
-.mobileMainHeaderNav .menu div {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  justify-content: center;
-  transition: all 500ms;
-}
-.mobileMainHeaderNav .menu span {
-  display: flex;
-  width: 100%;
-  height: 0.4rem;
-  background-color: var(--color-text-one);
-  border-radius: 0.4rem;
-}
-.mobileMainHeaderNav .menu .off span:not(:last-child) {
-  margin-bottom: 0.4rem;
-}
-.mobileMainHeaderNav .menu .on span {
-  position: absolute;
-}
-.mobileMainHeaderNav .menu .on span:first-child {
-  transform: rotate(45deg);
-  backface-visibility: hidden;
-}
-.mobileMainHeaderNav .menu .on span:last-child {
-  transform: rotate(135deg);
-  backface-visibility: hidden;
-}
-.mobileMainHeaderNav .showcase {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  top: 5rem;
-  transition: all 500ms;
-  width: calc(100% - 3rem);
-  padding: 0.8rem;
-  border-radius: 0.4rem;
-  box-shadow: 0 0 3px var(--color-text-one);
-}
-.mobileMainHeaderNav .menu:not(.active) ~ .showcase {
-  visibility: hidden;
-  opacity: 0;
-}
-.mobileMainHeaderNav .showcase a {
-  padding: 0.8rem;
-  display: flex;
-  justify-content: center;
-  box-shadow: 0 0 3px var(--color-text-one);
-  border-radius: 0.4rem;
-}
-.mobileMainHeaderNav .showcase a:not(:last-child) {
-  margin-bottom: 1rem;
-}
-.mobileMainHeaderNav .showcase a.active {
-  box-shadow: 0 0 3px var(--color-primary-two);
-  color: var(--color-primary-two);
-}
-
 .desktopMainHeaderNav {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
-  height: 100%;
-  padding: 0.8rem 0;
   display: none;
-  justify-content: space-between;
-  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.8rem 1.5rem;
+  height: 100%;
+}
+.desktopMainHeaderNav .left {
+  flex-grow: 1;
+}
+.desktopMainHeaderNav .right * {
+  margin-left: 2rem;
 }
 .desktopMainHeaderNav a {
-  display: flex;
+  display: inline-flex;
   height: 100%;
+  justify-content: center;
   align-items: center;
   padding: 0 1.5rem;
+  border-radius: 0.4rem;
   transition: all 300ms;
 }
-.desktopMainHeaderNav a.active {
-  color: var(--color-primary-two);
-}
-.desktopMainHeaderNav a:hover {
-  color: var(--color-primary-three);
+.desktopMainHeaderNav .right a:hover {
+  background-color: rgba(250, 250, 250, 0.2);
 }
 
-@media screen and (min-width: 600px) {
-  .mobileMainHeaderNav {
-    display: none;
-  }
+.mobileMainHeaderNav {
+  display: flex;
+  height: 100%;
+  padding: 0.8rem 1.5rem;
+  position: relative;
+}
+.mobileMainHeaderNav .logo {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.mobileMainHeaderNav .menu {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  height: 3rem;
+  width: 3.5rem;
+  background-color: transparent;
+  padding: 0.5rem;
+}
+.mobileMainHeaderNav .menu > span {
+  background-color: var(--color-text-one);
+  width: 100%;
+  height: 0.3rem;
+  margin: 0.15rem 0;
+  border-radius: 0.3rem;
+}
+.mobileMainHeaderNav .showcase {
+  position: fixed;
+  visibility: hidden;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.mobileMainHeaderNav .showcase .panelContainer {
+  max-width: 360px;
+  width: 90vw;
+  height: 100vh;
+  position: relative;
+}
+.mobileMainHeaderNav .showcase .panel {
+  max-width: 360px;
+  width: 90vw;
+  background-color: white;
+  height: 100vh;
+  position: absolute;
+  left: -100%;
+  transition: all 300ms ease-in;
+  border-radius: 0 1.5rem 0 0;
+  padding: 1.5rem;
+  color: rgb(150, 150, 150);
+}
+.mobileMainHeaderNav .showcase.active {
+  visibility: visible;
+}
+.mobileMainHeaderNav .showcase.active .panel {
+  left: 0;
+}
+.mobileMainHeaderNav .showcase .header {
+  height: 4.6rem;
+  display: flex;
+  align-items: center;
+}
+.mobileMainHeaderNav .showcase .header .logo {
+  flex-grow: 1;
+}
+.mobileMainHeaderNav .showcase .header .close {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: rgb(150, 150, 150);
+  background-color: transparent;
+  transition: all 300ms;
+  position: relative;
+}
+.mobileMainHeaderNav .showcase .header .close:hover {
+  color: var(--color-text-three);
+}
+.mobileMainHeaderNav .showcase .header .close span {
+  display: inline-flex;
+  height: 0.2rem;
+  width: 100%;
+  background-color: currentColor;
+  position: absolute;
+  border-radius: 0.2rem;
+}
+.mobileMainHeaderNav .showcase .header .close span:first-child {
+  transform: rotate(45deg);
+}
+.mobileMainHeaderNav .showcase .header .close span:last-child {
+  transform: rotate(135deg);
+}
+.mobileMainHeaderNav .showcase .spacer {
+  margin: 1rem 0;
+  background-color: rgb(245, 245, 255);
+  height: 0.2rem;
+  border-radius: 0.2rem;
+}
+.mobileMainHeaderNav .showcase .anchorContainer {
+  display: flex;
+  flex-direction: column;
+}
+.mobileMainHeaderNav .showcase .anchorContainer a {
+  padding: 0.8rem 2rem;
+  border-radius: 0.8rem;
+  transition: all 300ms;
+}
+.mobileMainHeaderNav .showcase .anchorContainer a:hover {
+  background-color: rgba(0, 101, 196, 0.03);
+  color: var(--color-text-three);
+}
+@media screen and (min-width: 768px) {
   .desktopMainHeaderNav {
     display: flex;
+  }
+  .mobileMainHeaderNav {
+    display: none;
   }
 }

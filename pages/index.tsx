@@ -1,10 +1,14 @@
 import React from "react";
-import styles from "styles/Pages.module.css";
 import type { NextPageX } from "types/app";
 import MainLayout from "components/layouts";
+import GamePlay from "components/gameplay";
 
 const Home: NextPageX = () => {
-  return <div></div>;
+  return (
+    <>
+      <GamePlay />
+    </>
+  );
 };
 
 Home.Layout = MainLayout;

@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import Link from "next/link";
 
 interface Anchor {
-  pass?: React.DetailedHTMLProps<
+  passProps?: React.DetailedHTMLProps<
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
     HTMLAnchorElement
   >;
@@ -16,10 +16,10 @@ interface Anchor {
 }
 
 export default function Anchor(props: Anchor) {
-  const { pass = {}, href = "#", children = <></> } = props;
+  const { passProps = {}, href = "#", children = <></> } = props;
   return (
     <Link href={href}>
-      <a {...pass}>{children}</a>
+      <a {...passProps}>{children}</a>
     </Link>
   );
 }
