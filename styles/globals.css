@@ -64,6 +64,18 @@
   font-family: PoppinsExtraBoldItalic;
   src: url("../fonts/Poppins/Poppins-ExtraBoldItalic.ttf");
 }
+@font-face {
+  font-family: Inika;
+  src: url("../fonts/Inika/Inika-Regular.ttf");
+}
+@font-face {
+  font-family: InikaBold;
+  src: url("../fonts/Inika/Inika-Bold.ttf");
+}
+@font-face {
+  font-family: Carter;
+  src: url("../fonts/Carter/CarterOne-Regular.ttf");
+}
 /* #endregion */
 
 * {
@@ -112,6 +124,8 @@ input:hover {
   --color-bg-one: rgb(0, 101, 196);
   --color-text-one: rgb(250, 253, 255);
   --color-text-three: rgb(68, 149, 255);
+  --color-white-glass-one: rgba(250, 250, 250, 0.2);
+  --color-green-glass-one: rgba(0, 255, 200, 0.1);
 
   min-height: 100vh;
   background-color: var(--color-bg-one);
@@ -244,6 +258,25 @@ input:hover {
 .t-mono {
   font-family: SourceCode, consolas, monospace;
   font-weight: 400;
+}
+
+.t-inika {
+  font-family: Inika, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.t-inika-bold {
+  letter-spacing: 0.2rem;
+  font-family: InikaBold, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+}
+
+.t-carter {
+  letter-spacing: 0.1rem;
+  word-spacing: 0.8rem;
+  font-family: Carter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 /*#endregion */

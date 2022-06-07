@@ -3,13 +3,41 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
-.gameboard {
-  flex-grow: 1;
-  margin-bottom: 1.5rem;
+.visible {
+  visibility: visible;
+  opacity: 1;
+  transition: all 1s;
+  position: absolute;
+  z-index: 0;
+}
+.invisible {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 1s;
+  position: absolute;
+  z-index: 0;
 }
 
-.controls {
-  height: 4.5rem;
+.startgame {
+  width: 100%;
+  max-width: 420px;
+}
+
+.bestToday {
+  width: 100%;
+  background-color: var(--color-green-glass-one);
+  border-radius: 0.4rem;
+}
+.bestToday .header {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 2rem;
+}
+.bestToday .avatarBox {
+  width: 6rem;
+  height: 6rem;
 }
