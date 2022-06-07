@@ -3,6 +3,7 @@ import Anchor from "components/anchors";
 import { useEffect, useState } from "react";
 import { Logo } from "components/icons";
 import { useRouter } from "next/router";
+import ButtonPrimary from "components/buttons";
 
 export function DesktopMainHeaderNav() {
   return (
@@ -16,6 +17,7 @@ export function DesktopMainHeaderNav() {
         <Anchor href="/stats">Statistics</Anchor>
         <Anchor href="/info">Information</Anchor>
         <Anchor href="/in">Sign in</Anchor>
+        <Anchor href="/join">Create account</Anchor>
       </div>
     </nav>
   );
@@ -62,25 +64,33 @@ function ShowCase({ disp, setDisp }: dispState) {
       className={`${styles.showcase} ${disp ? styles.active : ""}`}
       onClick={() => setDisp((prev) => !prev)}
     >
-      <div className={`${styles.panelContainer}`}>
-        <div
-          className={`${styles.panel} `}
-          onClick={(ev) => ev.stopPropagation()}
-        >
+      <div className={styles.panelContainer}>
+        <div className={styles.panel} onClick={(ev) => ev.stopPropagation()}>
           <div className={styles.header}>
             <Anchor passProps={{ className: styles.logo }} href="/">
               <Logo />
             </Anchor>
             <button className={styles.close} onClick={() => setDisp(false)}>
-              <span></span>
-              <span></span>
+              <div>
+                <span></span>
+                <span></span>
+              </div>
             </button>
           </div>
           <div className={styles.spacer} />
-          <div className={`${styles.anchorContainer} noScrollBar`}>
+          <div className={styles.anchorContainer}>
             <Anchor href="/stats">Statistics</Anchor>
             <Anchor href="/info">Information</Anchor>
-            <Anchor href="/in">Sign in</Anchor>
+            <Anchor href="/info" passProps={{ className: styles.ignore }}>
+              <ButtonPrimary fullWidth psuedo>
+                Create account
+              </ButtonPrimary>
+            </Anchor>
+            <Anchor href="/join" passProps={{ className: styles.ignore }}>
+              <ButtonPrimary fullWidth colored psuedo>
+                Sign in
+              </ButtonPrimary>
+            </Anchor>
           </div>
         </div>
       </div>

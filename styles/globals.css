@@ -98,10 +98,14 @@ a {
 }
 button,
 button:focus,
-button:hover {
+button:hover,
+input,
+input:focus,
+input:hover {
   border: inherit;
   outline: inherit;
   cursor: pointer;
+  font-size: inherit;
 }
 
 #body {
