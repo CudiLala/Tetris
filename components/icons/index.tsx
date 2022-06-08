@@ -14,3 +14,79 @@ export function Logo() {
     </svg>
   );
 }
+
+export function GameArrowUp() {
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 1680 1680"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M40 1102.36L840 40L1640 1102.36L1073.5 1020.5L1228.86 1640L840 1565.3L451.139 1640L612 1020.5L40 1102.36Z"
+        stroke="white"
+        strokeWidth="80"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function GameArrowLeft() {
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 1680 1680"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1102.36 1640L40 840L1102.36 40L1020.5 606.5L1640 451.139L1565.3 840L1640 1228.86L1020.5 1068L1102.36 1640Z"
+        stroke="white"
+        strokeWidth="80"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function GameArrowRight() {
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 1680 1680"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M577.637 1640L1640 840L577.637 40L659.5 606.5L40 451.139L114.697 840L40 1228.86L659.5 1068L577.637 1640Z"
+        stroke="white"
+        strokeWidth="80"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function GameArrowDown() {
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 1680 1680"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M40 577.637L840 1640L1640 577.637L1073.5 659.5L1228.86 40L840 114.697L451.139 40L612 659.5L40 577.637Z"
+        stroke="white"
+        strokeWidth="80"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

@@ -5,6 +5,7 @@ export interface buttonPrimary {
   colored?: boolean;
   fullWidth?: boolean;
   psuedo?: boolean;
+  whiteShadow?: boolean;
   passProps?: React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement

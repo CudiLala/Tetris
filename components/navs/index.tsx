@@ -78,9 +78,11 @@ function ShowCase({ disp, setDisp }: dispState) {
             </button>
           </div>
           <div className={styles.spacer} />
-          <div className={styles.anchorContainer}>
+          <div className={`${styles.anchorContainer} noScrollBar`}>
             <Anchor href="/stats">Statistics</Anchor>
+            <div className={styles.spacer} />
             <Anchor href="/info">Information</Anchor>
+            <div className={styles.spacer} />
             <Anchor href="/info" passProps={{ className: styles.ignore }}>
               <ButtonPrimary fullWidth psuedo>
                 Create account

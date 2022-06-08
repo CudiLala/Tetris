@@ -7,18 +7,19 @@ export default function ButtonPrimary({
   passProps,
   fullWidth,
   psuedo,
+  whiteShadow,
 }: buttonPrimary) {
   const className = `${styles.buttonPrimary} ${colored ? styles.colored : ""} ${
     fullWidth ? styles.fullWidth : ""
-  }`;
+  } ${whiteShadow ? styles.whiteShadow : ""}`;
   if (psuedo)
     return (
-      <span className={className} {...passProps}>
+      <span {...passProps} className={`${className} ${passProps?.className}`}>
         {children}
       </span>
     );
   return (
-    <button className={className} {...passProps}>
+    <button {...passProps} className={`${className} ${passProps?.className}`}>
       {children}
     </button>
   );
