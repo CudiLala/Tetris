@@ -1,9 +1,10 @@
 import styles from "styles/components/navs.module.css";
 import Anchor from "components/anchors";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Logo } from "components/icons";
 import { useRouter } from "next/router";
 import ButtonPrimary from "components/buttons";
+import { gameStateContext } from "components/app";
 
 export function DesktopMainHeaderNav() {
   return (
@@ -26,11 +27,23 @@ export function DesktopMainHeaderNav() {
 export function MobileMainHeaderNav() {
   const [disp, setDisp] = useState(false);
   const router = useRouter();
+  const [gameState, setGameState] = useContext(gameStateContext);
+
+  function closeDisp() {
+    setDisp(false);
+  }
+
+  /*eslint-disable*/
+  useEffect(() => {
+    router.events.on("routeChangeStart", closeDisp);
+    () => router.events.off("routeChangeStart", closeDisp);
+  }, [router]);
 
   useEffect(() => {
-    router.events.on("routeChangeStart", () => setDisp(false));
-    () => router.events.off("routeChangeStart", () => setDisp(false));
-  }, [router]);
+    if (disp && gameState === "playing") setGameState("paused");
+  }, [disp]);
+
+  /*eslint-enable*/
 
   return (
     <nav className={styles.mobileMainHeaderNav}>

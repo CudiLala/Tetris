@@ -8,4 +8,10 @@ const Display = { Play, Start, Pause, LevelChange, End };
 
 export default Display;
 export { Play, Start, Pause, LevelChange, End };
-export { BestToday, Instruction } from "./others";
+export {
+  BestToday,
+  Instruction,
+  Controls,
+  GameBoard,
+  ShowBoard,
+} from "./others";

@@ -1,5 +1,4 @@
-import ButtonPrimary from "components/buttons";
-import { gameStateContext } from "components/gameplay";
+import { gameStateContext } from "components/app";
 import { useContext } from "react";
 import styles from "styles/components/gameplay.module.css";
 import { BestToday, Instruction } from ".";

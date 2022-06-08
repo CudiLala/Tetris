@@ -74,6 +74,7 @@
 }
 .controls .text {
   font-size: 1.6rem;
+  text-align: center;
 }
 
 .spacer {
@@ -99,4 +100,32 @@
 }
 .actionButtonsBox > .button:hover {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.gameboard {
+  padding: 0.5rem 0;
+  display: grid;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.gameboard div {
+  border-radius: 30%;
+  background-color: var(--color-white-glass-one);
+}
+
+.showboard {
+  display: flex;
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.5rem 0;
+}
+.showboard .nextTile {
+  display: grid;
+  gap: 0.4rem;
+}
+.showboard .nextTile div {
+  border-radius: 30%;
+  background-color: var(--color-white-glass-one);
 }
