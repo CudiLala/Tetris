@@ -61,8 +61,8 @@ export function Controls({ impotent }: controls) {
   return (
     <div className={styles.controls}>
       <Arrow Arrow={<GameArrowLeft />} impotent={impotent} text="Left" />
-      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Down" />
-      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="Up" />
+      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Drop" />
+      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="Rotate" />
       <Arrow Arrow={<GameArrowRight />} impotent={impotent} text="Right" />
     </div>
   );
@@ -72,7 +72,7 @@ export function GameBoard() {
   const [width, setWidth] = useState(0);
   const gameboard = useRef<HTMLDivElement>(null);
 
-  const boxWidth = (width - 7 * 5) / 8;
+  const boxWidth = (width - 7 * 4) / 8;
   const style: React.CSSProperties = {
     gridTemplateColumns: `repeat(8, ${boxWidth}px)`,
     gridAutoRows: `${boxWidth}px`,

@@ -60,7 +60,6 @@
 }
 .controls .arrowContainer {
   flex-grow: 1;
-  margin-top: 1rem;
   padding: 1rem 1rem;
   cursor: pointer;
   border-radius: 3rem;
@@ -103,9 +102,9 @@
 }
 
 .gameboard {
-  margin-top: 1rem;
+  margin: 1rem 0;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.4rem;
   justify-content: center;
 }
 
