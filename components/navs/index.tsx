@@ -83,12 +83,12 @@ function ShowCase({ disp, setDisp }: dispState) {
             <div className={styles.spacer} />
             <Anchor href="/info">Information</Anchor>
             <div className={styles.spacer} />
-            <Anchor href="/info" passProps={{ className: styles.ignore }}>
+            <Anchor href="/join" passProps={{ className: styles.ignore }}>
               <ButtonPrimary fullWidth psuedo>
                 Create account
               </ButtonPrimary>
             </Anchor>
-            <Anchor href="/join" passProps={{ className: styles.ignore }}>
+            <Anchor href="/in" passProps={{ className: styles.ignore }}>
               <ButtonPrimary fullWidth colored psuedo>
                 Sign in
               </ButtonPrimary>

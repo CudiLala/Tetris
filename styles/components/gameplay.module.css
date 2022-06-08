@@ -60,8 +60,14 @@
 }
 .controls .arrowContainer {
   flex-grow: 1;
-  margin: 1rem 1rem;
+  margin-top: 0.5rem;
+  padding: 1rem 1rem;
   cursor: pointer;
+  border-radius: 3rem;
+  transition: all 500ms;
+}
+.controls .arrowContainer:hover {
+  background-color: var(--color-white-glass-one);
 }
 .controls .arrow {
   height: 3rem;
