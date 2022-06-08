@@ -22,7 +22,8 @@
   z-index: 0;
 }
 
-.startgame {
+.startgame,
+.gameboard {
   width: 100%;
   max-width: 420px;
 }
@@ -101,14 +102,14 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.gameboard {
+.tetrisboard {
   margin: 1rem 0;
   display: grid;
   gap: 0.4rem;
   justify-content: center;
 }
 
-.gameboard div {
+.tetrisboard div {
   border-radius: 30%;
   background-color: var(--color-white-glass-one);
 }

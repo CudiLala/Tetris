@@ -68,9 +68,9 @@ export function Controls({ impotent }: controls) {
   );
 }
 
-export function GameBoard() {
+export function TetrisBoard() {
   const [width, setWidth] = useState(0);
-  const gameboard = useRef<HTMLDivElement>(null);
+  const tetrisboard = useRef<HTMLDivElement>(null);
 
   const boxWidth = (width - 7 * 4) / 8;
   const style: React.CSSProperties = {
@@ -79,7 +79,7 @@ export function GameBoard() {
   };
 
   function resizeWidth() {
-    setWidth(Math.min(gameboard.current?.clientWidth || 0, 320));
+    setWidth(Math.min(tetrisboard.current?.clientWidth || 0, 320));
   }
 
   useLayoutEffect(() => {
@@ -94,7 +94,7 @@ export function GameBoard() {
   return (
     <>
       <ShowBoard boxWidth={(boxWidth * 3) / 4} />
-      <div className={styles.gameboard} ref={gameboard} style={style}>
+      <div className={styles.tetrisboard} ref={tetrisboard} style={style}>
         {new Array(80).fill(0).map((e, idx) => (
           <div key={idx} />
         ))}

@@ -12,6 +12,6 @@ export {
   BestToday,
   Instruction,
   Controls,
-  GameBoard,
+  TetrisBoard,
   ShowBoard,
 } from "./others";
