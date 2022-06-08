@@ -6,7 +6,7 @@ import { BestToday, Instruction } from ".";
 export default function StartDisplay({ visible }: { visible: boolean }) {
   const [, setGameState] = useContext(gameStateContext);
 
-  const className = `${styles.startgame} ${
+  const className = `${styles.startDisplay} ${
     visible ? styles.visible : styles.invisible
   }`;
   return (

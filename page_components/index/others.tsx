@@ -79,7 +79,10 @@ export function TetrisBoard() {
   };
 
   function resizeWidth() {
-    setWidth(Math.min(tetrisboard.current?.clientWidth || 0, 320));
+    const height = (tetrisboard.current?.clientHeight || 20) - 20;
+    const width = (tetrisboard.current?.clientWidth || 20) - 20;
+
+    setWidth(Math.min(width, height * 0.8));
   }
 
   useLayoutEffect(() => {
@@ -92,14 +95,14 @@ export function TetrisBoard() {
   }, []);
 
   return (
-    <>
+    <div className={styles.gameboard}>
       <ShowBoard boxWidth={(boxWidth * 3) / 4} />
       <div className={styles.tetrisboard} ref={tetrisboard} style={style}>
         {new Array(80).fill(0).map((e, idx) => (
           <div key={idx} />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 
