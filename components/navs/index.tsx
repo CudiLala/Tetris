@@ -28,20 +28,33 @@ export function MobileMainHeaderNav() {
   const [disp, setDisp] = useState(false);
   const router = useRouter();
   const [gameState, setGameState] = useContext(gameStateContext);
+  const [width, setWidth] = useState(0);
 
   function closeDisp() {
     setDisp(false);
+  }
+  function resizeWidth() {
+    setWidth(window.innerWidth);
   }
 
   /*eslint-disable*/
   useEffect(() => {
     router.events.on("routeChangeStart", closeDisp);
-    () => router.events.off("routeChangeStart", closeDisp);
+    window.addEventListener("resize", resizeWidth);
+
+    return () => {
+      router.events.off("routeChangeStart", closeDisp);
+      window.removeEventListener("resize", resizeWidth);
+    };
   }, [router]);
 
   useEffect(() => {
     if (disp && gameState === "playing") setGameState("paused");
   }, [disp]);
+
+  useEffect(() => {
+    if (width >= 768) setDisp(false);
+  }, [width]);
 
   /*eslint-enable*/
 

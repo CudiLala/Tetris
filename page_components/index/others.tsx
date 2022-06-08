@@ -6,7 +6,7 @@ import {
 } from "components/icons";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import styles from "styles/components/gameplay.module.css";
-import { controls, showboard } from "types/components/gameplay";
+import { arrow, controls, showboard } from "types/components/gameplay";
 
 export function BestToday() {
   return (
@@ -46,33 +46,24 @@ export function Instruction() {
   );
 }
 
+function Arrow({ Arrow, impotent, text }: arrow) {
+  return (
+    <div className={styles.arrowContainer} tabIndex={0}>
+      <div className={styles.arrow}>{Arrow}</div>
+      {impotent && (
+        <div className={`${styles.text} t-xlight noSelection`}>{text}</div>
+      )}
+    </div>
+  );
+}
+
 export function Controls({ impotent }: controls) {
   return (
     <div className={styles.controls}>
-      <div className={styles.arrowContainer} tabIndex={0}>
-        <div className={styles.arrow}>
-          <GameArrowLeft />
-        </div>
-        <div className={`${styles.text} t-xlight noSelection`}>Left</div>
-      </div>
-      <div className={styles.arrowContainer} tabIndex={0}>
-        <div className={styles.arrow}>
-          <GameArrowDown />
-        </div>
-        <div className={`${styles.text} t-xlight noSelection`}>Drop</div>
-      </div>
-      <div className={styles.arrowContainer} tabIndex={0}>
-        <div className={styles.arrow}>
-          <GameArrowUp />
-        </div>
-        <div className={`${styles.text} t-xlight noSelection`}>Rotate</div>
-      </div>
-      <div className={styles.arrowContainer} tabIndex={0}>
-        <div className={styles.arrow}>
-          <GameArrowRight />
-        </div>
-        <div className={`${styles.text} t-xlight noSelection`}>Right</div>
-      </div>
+      <Arrow Arrow={<GameArrowLeft />} impotent={impotent} text="Left" />
+      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Down" />
+      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="Up" />
+      <Arrow Arrow={<GameArrowRight />} impotent={impotent} text="Right" />
     </div>
   );
 }
@@ -102,7 +93,7 @@ export function GameBoard() {
 
   return (
     <>
-      <ShowBoard boxWidth={boxWidth / 1.5} />
+      <ShowBoard boxWidth={(boxWidth * 3) / 4} />
       <div className={styles.gameboard} ref={gameboard} style={style}>
         {new Array(80).fill(0).map((e, idx) => (
           <div key={idx} />
