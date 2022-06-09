@@ -12,7 +12,7 @@
   opacity: 1;
   transition: all 1s;
   position: relative;
-  z-index: 0;
+  z-index: 1;
 }
 .invisible {
   visibility: hidden;
@@ -136,4 +136,50 @@
 .showboard .nextTile div {
   border-radius: 30%;
   background-color: var(--color-white-glass-one);
+}
+
+.showboard .pauseAndMuteContainer {
+  margin: 0 1.5rem;
+  width: 3rem;
+}
+
+.showboard .pauseAndMuteContainer button {
+  background-color: transparent;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: inherit;
+}
+.showboard .pauseAndMuteContainer button span {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 300ms;
+}
+.showboard .pauseAndMuteContainer button span.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.showboard .infoContainer {
+  flex-grow: 1;
+}
+
+.showboard .infoContainer .info {
+  padding: 0.3rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.8);
 }

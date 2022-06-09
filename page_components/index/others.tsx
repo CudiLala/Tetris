@@ -1,10 +1,21 @@
+import { gameStateContext } from "components/app";
 import {
   GameArrowDown,
   GameArrowLeft,
   GameArrowRight,
   GameArrowUp,
+  MuteIcon,
+  PauseIcon,
+  PlayIcon,
+  VolumeIcon,
 } from "components/icons";
-import { useEffect, useRef, useState, useLayoutEffect } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+  useContext,
+} from "react";
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
 
@@ -122,15 +133,61 @@ export function ShowBoard({ boxWidth }: showboard) {
         </div>
       </div>
       <div className={styles.pauseAndMuteContainer}>
-        <div className={styles.pause}></div>
-        <div className={styles.mute}></div>
+        <div className={styles.pause}>
+          <PauseButton />
+        </div>
+        <div className={styles.mute}>
+          <MuteButton />
+        </div>
       </div>
       <div className={styles.infoContainer}>
         <div>
-          <div className={styles.score}></div>
-          <div className={styles.level}></div>
+          <div className={`${styles.score} ${styles.info} t-mono`}>
+            <div>Score:</div>
+            <div>&ensp;XXX</div>
+          </div>
+          <div className={`${styles.level} ${styles.info} t-mono`}>
+            <div>Level:</div>
+            <div>&ensp;XX</div>
+          </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export function PauseButton() {
+  const [gameState, setGameState] = useContext(gameStateContext);
+
+  function switchGameState() {
+    setGameState((prev) =>
+      prev === "paused" ? "playing" : prev === "playing" ? "paused" : prev
+    );
+  }
+
+  return (
+    <button onClick={switchGameState}>
+      <span className={`${gameState === "paused" ? styles.active : ""}`}>
+        <PlayIcon />
+      </span>
+      <span className={`${gameState === "playing" ? styles.active : ""}`}>
+        <PauseIcon />
+      </span>
+    </button>
+  );
+}
+
+export function MuteButton() {
+  const [muted, setMuted] = useState(false);
+
+  return (
+    <button onClick={() => setMuted((prev) => !prev)}>
+      <span className={`${muted ? styles.active : ""}`}>
+        <VolumeIcon />
+      </span>
+      <span className={`${!muted ? styles.active : ""}`}>
+        <MuteIcon />
+      </span>
+    </button>
   );
 }

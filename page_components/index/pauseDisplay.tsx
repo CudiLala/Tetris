@@ -9,7 +9,7 @@ export default function PauseDisplay({ visible }: { visible: boolean }) {
     visible ? styles.visible : styles.invisible
   }`;
   return (
-    <div className={className}>
+    <div className={className} style={{ padding: "5rem" }}>
       Paused Game
       <button onClick={() => setGameState("playing")}>change</button>
     </div>
