@@ -3,6 +3,13 @@ import { gameStates } from "types/pages";
 import styles from "styles/components/gameplay.module.css";
 import GameEvent from "./events";
 
+type NumPosMap = { [key: number]: number[] };
+type TileMap = {
+  rowMap: NumPosMap;
+  width: number;
+  height: number;
+};
+
 interface game {
   new: boolean;
   state: gameStates;
@@ -11,6 +18,7 @@ interface game {
   currentTile: number[][];
   logicBoard: number[][];
   logicBoardStore: number[][];
+  currentTileMap: TileMap;
 }
 
 interface startFnArgs {
@@ -28,6 +36,7 @@ const game: game = {
   currentTile: newBoard(4, 4),
   logicBoard: newBoard(8, 10),
   logicBoardStore: newBoard(8, 10),
+  currentTileMap: { rowMap: {}, width: 0, height: 0 },
 };
 
 const timers = {
@@ -50,9 +59,10 @@ export async function startGame({
   await startCountDown(setCountDown);
 
   function run(timestamp: number) {
+    paint();
     handleTileDownwardMovement(timestamp);
-
     paintDom(tetrisBoard, nextTileBoard);
+
     return requestAnimationFrame(run);
   }
 
@@ -62,6 +72,7 @@ export async function startGame({
 function prepareGame() {
   game.currentTile = createTile();
   game.nextTile = createTile();
+  game.currentTileMap = getCurrentTileMap();
 
   game.new = false;
   game.state = "playing";
@@ -81,6 +92,22 @@ function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
       }
     }
   });
+}
+
+function paint() {
+  const { rowMap, width, height } = getCurrentTileAbsoluteMap();
+  const dummyBoard: number[][] = clone(game.logicBoardStore);
+  const color = getColor(game.currentTile);
+
+  for (let i in rowMap) {
+    if (Number(i) >= 0) {
+      dummyBoard[i] = dummyBoard[i].map((elem, idx) =>
+        rowMap[i].includes(idx) ? color : elem
+      );
+    }
+  }
+
+  game.logicBoard = dummyBoard;
 }
 
 function paintDom(
@@ -105,19 +132,77 @@ function handleTileDownwardMovement(timestamp: number) {
 }
 
 function moveTileDown() {
-  if (cursor.bottom > 9) {
+  if (cursor.bottom >= 9) {
     GameEvent.emit("dropped");
     return;
   }
 
-  const [tiles, numberOfRows, highestRow] = getPositions(game.currentTile);
-  const dummyBoard: number[][] = clone(game.logicBoardStore);
-  const tileMap: { [key: number]: number[] } = {};
-  let color = 1;
+  cursor.bottom++;
+}
 
-  //getting color of current tile
+function getCurrentTileMap(): TileMap {
+  const rowMap: NumPosMap = {};
+  let rowIdx = 0;
+
+  for (let i = 0; i < game.currentTile.length; i++) {
+    let foundRowElem = false;
+
+    for (let j = 0; j < game.currentTile.length; j++) {
+      const rowElem = game.currentTile[i][j];
+      if (rowElem) {
+        rowMap[rowIdx] = rowMap[rowIdx] ? [...rowMap[rowIdx], j] : [j];
+        foundRowElem = true;
+      }
+    }
+
+    if (foundRowElem) ++rowIdx;
+    foundRowElem = false;
+  }
+
+  let height = Object.keys(rowMap).length;
+  let width = -Infinity;
+  let minimum = Infinity;
+
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < rowMap[i].length; j++) {
+      minimum = Math.min(minimum, rowMap[i][j]);
+    }
+    width = Math.max(width, rowMap[i].length);
+  }
+
+  if (minimum !== 0) {
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < rowMap[i].length; j++) {
+        rowMap[i][j] = rowMap[i][j] - minimum;
+      }
+    }
+  }
+
+  return { rowMap, width, height };
+}
+
+function getCurrentTileAbsoluteMap(): TileMap {
+  const { rowMap, width, height } = game.currentTileMap;
+  const newMap: NumPosMap = {};
+
+  for (let i = 0; i < height; i++) {
+    newMap[cursor.bottom - (height - 1 - i)] = clone(rowMap[i]);
+    for (let j = 0; j < rowMap[i].length; j++) {
+      newMap[cursor.bottom - (height - 1 - i)][j] = rowMap[i][j] + cursor.left;
+    }
+  }
+
+  return {
+    rowMap: newMap,
+    width,
+    height,
+  };
+}
+
+function getColor(board: number[][]) {
+  let color = 1;
   game.currentTile.some((row) =>
-    row.find((elem) => {
+    row.some((elem) => {
       if (elem) {
         color = elem;
         return true;
@@ -125,48 +210,17 @@ function moveTileDown() {
       return false;
     })
   );
-
-  tiles.forEach((arr) => {
-    tileMap[highestRow - arr[0]] = tileMap[highestRow - arr[0]]
-      ? [...tileMap[highestRow - arr[0]], cursor.left + arr[1]]
-      : [cursor.left + arr[1]];
-  });
-
-  let i = 0;
-  while (i < Math.min(numberOfRows, cursor.bottom + 1)) {
-    dummyBoard[cursor.bottom - i] = dummyBoard[cursor.bottom - i].map(
-      (elem, idx) => {
-        return tileMap[i].includes(idx) ? color : elem;
-      }
-    );
-    i++;
-  }
-
-  game.logicBoard = dummyBoard;
-
-  cursor.bottom++;
-}
-
-function getPositions(board: number[][]): [number[][], number, number] {
-  const arr: number[][] = [];
-  let rows: { [key: number]: any } = {};
-
-  board.forEach((row, i) =>
-    row.forEach((elem, j) => {
-      if (elem) {
-        arr.push([i, j]);
-        rows[i] = "";
-      }
-    })
-  );
-
-  let rowsArray: any[] = Object.keys(rows);
-
-  return [arr, rowsArray.length, Math.max(...rowsArray)];
+  return color;
 }
 
 export function pauseGame() {
   game.state = "paused";
+}
+
+function reloadTile() {
+  game.currentTile = clone(game.nextTile);
+  game.currentTileMap = getCurrentTileMap();
+  game.nextTile = createTile();
 }
 
 const tiles: { [key: number]: number[][] } = {
@@ -216,7 +270,7 @@ function createTile() {
 function flip(board: number[][], num: number) {
   if (num === 0) return board;
 
-  board = JSON.parse(JSON.stringify(board));
+  board = clone(board);
 
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length / 2; j++) {
@@ -232,7 +286,7 @@ function flip(board: number[][], num: number) {
 function rotate(board: number[][], num: number): number[][] {
   if (num === 0) return board;
 
-  const freshBoard = board.map((row) => [...row]);
+  const freshBoard = clone(board);
 
   for (let i = 0; i < freshBoard.length; i++) {
     for (let j = 0; j < freshBoard[i].length; j++) {
