@@ -3,18 +3,6 @@ import { default as Start } from "./startDisplay";
 import { default as Pause } from "./pauseDisplay";
 import { default as LevelChange } from "./levelChange";
 import { default as End } from "./endDisplay";
-import * as utils from "./utils";
 
 const Display = { Play, Start, Pause, LevelChange, End };
-
 export default Display;
-export { Play, Start, Pause, LevelChange, End };
-export {
-  BestToday,
-  Instruction,
-  Controls,
-  TetrisBoard,
-  ShowBoard,
-} from "./others";
-
-export { utils };

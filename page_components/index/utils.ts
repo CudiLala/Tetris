@@ -45,7 +45,7 @@ const timers = {
 };
 
 const cursor = {
-  bottom: 0,
+  bottom: -1,
   left: 2,
 };
 
@@ -76,6 +76,18 @@ function prepareGame() {
 
   game.new = false;
   game.state = "playing";
+
+  resetCursor();
+
+  GameEvent.subscribe(
+    "dropped",
+    () => {
+      reloadTile();
+      storeLogicBoard();
+      resetCursor();
+    },
+    "drop event"
+  );
 }
 
 function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
@@ -132,7 +144,7 @@ function handleTileDownwardMovement(timestamp: number) {
 }
 
 function moveTileDown() {
-  if (cursor.bottom >= 9) {
+  if (isBlockedBown()) {
     GameEvent.emit("dropped");
     return;
   }
@@ -160,14 +172,14 @@ function getCurrentTileMap(): TileMap {
   }
 
   let height = Object.keys(rowMap).length;
-  let width = -Infinity;
+  let maximum = -Infinity;
   let minimum = Infinity;
 
   for (let i = 0; i < height; i++) {
     for (let j = 0; j < rowMap[i].length; j++) {
       minimum = Math.min(minimum, rowMap[i][j]);
+      maximum = Math.max(maximum, rowMap[i][j]);
     }
-    width = Math.max(width, rowMap[i].length);
   }
 
   if (minimum !== 0) {
@@ -177,6 +189,8 @@ function getCurrentTileMap(): TileMap {
       }
     }
   }
+
+  const width = maximum - minimum + 1;
 
   return { rowMap, width, height };
 }
@@ -213,14 +227,43 @@ function getColor(board: number[][]) {
   return color;
 }
 
-export function pauseGame() {
-  game.state = "paused";
-}
-
 function reloadTile() {
   game.currentTile = clone(game.nextTile);
   game.currentTileMap = getCurrentTileMap();
   game.nextTile = createTile();
+}
+
+function storeLogicBoard() {
+  game.logicBoardStore = clone(game.logicBoard);
+}
+
+function resetCursor() {
+  cursor.bottom = -1;
+  cursor.left = 4 - Math.ceil(game.currentTileMap.width / 2);
+}
+
+function isBlockedBown() {
+  const { rowMap } = getCurrentTileAbsoluteMap();
+  let blocked = false;
+
+  iloop: for (let key in rowMap) {
+    let i = Number(key);
+
+    if (i < -1) continue;
+    if (i === 9) blocked = true;
+    if (blocked) break iloop;
+
+    for (let j = 0; j < rowMap[i].length; j++) {
+      blocked = !!game.logicBoardStore[i + 1][rowMap[i][j]];
+      if (blocked) break iloop;
+    }
+  }
+
+  return blocked;
+}
+
+export function pauseGame() {
+  game.state = "paused";
 }
 
 const tiles: { [key: number]: number[][] } = {
@@ -311,21 +354,5 @@ export const colorMap: { [key: number]: string } = {
 };
 
 function clone(item: any) {
-  if (typeof item !== "object") return item;
-
-  if (item === null) return null;
-
-  if (Array.isArray(item)) {
-    const newItem: any[] = [];
-    item.forEach((elem, idx) => {
-      newItem[idx] = clone(elem);
-    });
-    return newItem;
-  }
-
-  const newItem: { [key: string]: any } = {};
-  for (let key in item) {
-    newItem[key] = clone(item[key]);
-  }
-  return newItem;
+  return JSON.parse(JSON.stringify(item));
 }

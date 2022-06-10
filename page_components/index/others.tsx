@@ -18,8 +18,8 @@ import React, {
 } from "react";
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
-import { utils } from ".";
-import { newBoard } from "./utils";
+// import { utils } from ".";
+import { newBoard, pauseGame, startGame } from "./utils";
 
 export function BestToday() {
   return (
@@ -110,13 +110,13 @@ export function TetrisBoard() {
 
   useEffect(() => {
     if (gameState === "playing")
-      utils.startGame({
+      startGame({
         setCountDown,
         nextTileBoard,
         tetrisBoard,
         setGameState,
       });
-    if (gameState === "paused") utils.pauseGame();
+    if (gameState === "paused") pauseGame();
   }, [gameState]);
 
   useEffect(() => {

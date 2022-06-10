@@ -1,5 +1,5 @@
 import styles from "styles/components/gameplay.module.css";
-import { Controls, TetrisBoard, ShowBoard } from ".";
+import { TetrisBoard, Controls } from "./others";
 
 export default function GameDisplay({ visible }: { visible: boolean }) {
   const className = `${styles.gameDisplay} ${

@@ -1,7 +1,7 @@
 import { gameStateContext } from "components/app";
 import { useContext } from "react";
 import styles from "styles/components/gameplay.module.css";
-import { BestToday, Instruction } from ".";
+import { BestToday, Instruction } from "./others";
 
 export default function StartDisplay({ visible }: { visible: boolean }) {
   const [, setGameState] = useContext(gameStateContext);

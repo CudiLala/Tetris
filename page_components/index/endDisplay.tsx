@@ -1,7 +1,6 @@
 import { gameStateContext } from "components/app";
 import { useContext } from "react";
 import styles from "styles/components/gameplay.module.css";
-import { Instruction } from ".";
 
 export default function EndDisplay({ visible }: { visible: boolean }) {
   const [, setGameState] = useContext(gameStateContext);
