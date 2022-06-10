@@ -1,42 +1,70 @@
 import React from "react";
 import { gameStates } from "types/pages";
+import styles from "styles/components/gameplay.module.css";
+import GameEvent from "./events";
+
+interface game {
+  new: boolean;
+  state: gameStates;
+  level: number;
+  nextTile: number[][];
+  currentTile: number[][];
+  logicBoard: number[][];
+  logicBoardStore: number[][];
+}
 
 interface startFnArgs {
   setCountDown: React.Dispatch<React.SetStateAction<number | undefined>>;
-  setNextTile: React.Dispatch<React.SetStateAction<number[][]>>;
-  setTetrisLogicBoard: React.Dispatch<React.SetStateAction<number[][]>>;
+  nextTileBoard: React.RefObject<HTMLDivElement>;
+  tetrisBoard: React.RefObject<HTMLDivElement>;
   setGameState: React.Dispatch<React.SetStateAction<gameStates>>;
 }
 
-const game = {
+const game: game = {
   new: true,
   state: "to begin",
+  level: 1,
   nextTile: newBoard(4, 4),
   currentTile: newBoard(4, 4),
-  logicboard: newBoard(8, 10),
-  logicboardstore: newBoard(8, 10),
+  logicBoard: newBoard(8, 10),
+  logicBoardStore: newBoard(8, 10),
 };
 
-const cursors = {
-  bottomCursor: 0,
+const timers = {
+  lastDropTime: 0,
+  lastShiftTime: 0,
 };
 
-const timers: { [key: string]: any } = {
-  dropId: 0,
-  loopId: 0,
+const cursor = {
+  bottom: 0,
+  left: 2,
 };
 
 export async function startGame({
   setCountDown,
-  setNextTile,
-  setTetrisLogicBoard,
+  nextTileBoard,
+  tetrisBoard,
   setGameState,
 }: startFnArgs) {
-  if (game.new) prepareGame(setNextTile);
+  if (game.new) prepareGame();
   await startCountDown(setCountDown);
 
-  timers.dropId = setInterval(dropTile, 1000);
-  timers.loopId = setInterval(() => setTetrisLogicBoard(game.logicboard), 16);
+  function run(timestamp: number) {
+    handleTileDownwardMovement(timestamp);
+
+    paintDom(tetrisBoard, nextTileBoard);
+    return requestAnimationFrame(run);
+  }
+
+  requestAnimationFrame(run);
+}
+
+function prepareGame() {
+  game.currentTile = createTile();
+  game.nextTile = createTile();
+
+  game.new = false;
+  game.state = "playing";
 }
 
 function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
@@ -55,20 +83,90 @@ function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
   });
 }
 
-export function pauseGame() {
-  game.state = "paused";
-  clearInterval(timers.dropId);
-  clearInterval(timers.loopId);
+function paintDom(
+  tetrisBoard: startFnArgs["tetrisBoard"],
+  nextTileBoard: startFnArgs["nextTileBoard"]
+) {
+  tetrisBoard.current?.querySelectorAll("div").forEach((elem, idx) => {
+    elem.className =
+      styles[colorMap[game.logicBoard[Math.floor(idx / 8)][idx % 8]]];
+  });
+  nextTileBoard.current?.querySelectorAll("div").forEach((elem, idx) => {
+    elem.className =
+      styles[colorMap[game.nextTile[Math.floor(idx / 4)][idx % 4]]];
+  });
 }
 
-function prepareGame(setNextTile: startFnArgs["setNextTile"]) {
-  game.currentTile = createTile();
-  game.nextTile = createTile();
+function handleTileDownwardMovement(timestamp: number) {
+  if (timestamp - timers.lastDropTime > 1000 - (game.level - 1) * 100) {
+    timers.lastDropTime = timestamp;
+    moveTileDown();
+  }
+}
 
-  game.new = false;
-  game.state = "playing";
+function moveTileDown() {
+  if (cursor.bottom > 9) {
+    GameEvent.emit("dropped");
+    return;
+  }
 
-  setNextTile(game.nextTile);
+  const [tiles, numberOfRows, highestRow] = getPositions(game.currentTile);
+  const dummyBoard: number[][] = clone(game.logicBoardStore);
+  const tileMap: { [key: number]: number[] } = {};
+  let color = 1;
+
+  //getting color of current tile
+  game.currentTile.some((row) =>
+    row.find((elem) => {
+      if (elem) {
+        color = elem;
+        return true;
+      }
+      return false;
+    })
+  );
+
+  tiles.forEach((arr) => {
+    tileMap[highestRow - arr[0]] = tileMap[highestRow - arr[0]]
+      ? [...tileMap[highestRow - arr[0]], cursor.left + arr[1]]
+      : [cursor.left + arr[1]];
+  });
+
+  let i = 0;
+  while (i < Math.min(numberOfRows, cursor.bottom + 1)) {
+    dummyBoard[cursor.bottom - i] = dummyBoard[cursor.bottom - i].map(
+      (elem, idx) => {
+        return tileMap[i].includes(idx) ? color : elem;
+      }
+    );
+    i++;
+  }
+
+  game.logicBoard = dummyBoard;
+
+  cursor.bottom++;
+}
+
+function getPositions(board: number[][]): [number[][], number, number] {
+  const arr: number[][] = [];
+  let rows: { [key: number]: any } = {};
+
+  board.forEach((row, i) =>
+    row.forEach((elem, j) => {
+      if (elem) {
+        arr.push([i, j]);
+        rows[i] = "";
+      }
+    })
+  );
+
+  let rowsArray: any[] = Object.keys(rows);
+
+  return [arr, rowsArray.length, Math.max(...rowsArray)];
+}
+
+export function pauseGame() {
+  game.state = "paused";
 }
 
 const tiles: { [key: number]: number[][] } = {
@@ -110,8 +208,8 @@ function createTile() {
   const n3 = Math.floor(Math.random() * 4);
   const n4 = Math.floor(Math.random() * 5) + 1;
 
-  return rotate(flip(tiles[n1], n2), n3).map((e) =>
-    [...e].map((e) => (e ? n4 : 0))
+  return rotate(flip(tiles[n1], n2), n3).map((row) =>
+    [...row].map((elem) => (elem ? n4 : 0))
   );
 }
 
@@ -134,29 +232,15 @@ function flip(board: number[][], num: number) {
 function rotate(board: number[][], num: number): number[][] {
   if (num === 0) return board;
 
-  const newboard = board.map((e) => [...e]);
+  const freshBoard = board.map((row) => [...row]);
 
-  for (let i = 0; i < newboard.length; i++) {
-    for (let j = 0; j < newboard[i].length; j++) {
-      newboard[i][j] = board[j][newboard.length - 1 - i];
+  for (let i = 0; i < freshBoard.length; i++) {
+    for (let j = 0; j < freshBoard[i].length; j++) {
+      freshBoard[i][j] = board[j][freshBoard.length - 1 - i];
     }
   }
 
-  return rotate(newboard, num - 1);
-}
-
-function dropTile() {
-  if (cursors.bottomCursor > 9) {
-    clearInterval(timers.dropId);
-    return;
-  }
-
-  const dummyboard = game.logicboardstore.map((e) => [...e]);
-  dummyboard[cursors.bottomCursor] = [1, 1, 1, 0, 0, 0, 0, 0];
-
-  game.logicboard = dummyboard;
-
-  cursors.bottomCursor++;
+  return rotate(freshBoard, num - 1);
 }
 
 export function newBoard(width: number, height: number): number[][] {
@@ -171,3 +255,23 @@ export const colorMap: { [key: number]: string } = {
   [4]: "blue",
   [5]: "purple",
 };
+
+function clone(item: any) {
+  if (typeof item !== "object") return item;
+
+  if (item === null) return null;
+
+  if (Array.isArray(item)) {
+    const newItem: any[] = [];
+    item.forEach((elem, idx) => {
+      newItem[idx] = clone(elem);
+    });
+    return newItem;
+  }
+
+  const newItem: { [key: string]: any } = {};
+  for (let key in item) {
+    newItem[key] = clone(item[key]);
+  }
+  return newItem;
+}

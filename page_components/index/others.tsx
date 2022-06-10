@@ -19,6 +19,7 @@ import React, {
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
 import { utils } from ".";
+import { newBoard } from "./utils";
 
 export function BestToday() {
   return (
@@ -84,11 +85,9 @@ export function TetrisBoard() {
   const [width, setWidth] = useState(0);
   const [gameState, setGameState] = useContext(gameStateContext);
 
-  const tetrisboard = useRef<HTMLDivElement>(null);
-  const [tetrisLogicBoard, setTetrisLogicBoard] = useState<number[][]>(
-    utils.newBoard(8, 10)
-  );
-  const [nextTile, setNextTile] = useState<number[][]>(utils.newBoard(4, 4));
+  const tetrisBoard = useRef<HTMLDivElement>(null);
+  const nextTileBoard = useRef<HTMLDivElement>(null);
+
   const [countDown, setCountDown] = useState<number>();
 
   const boxWidth = (width - 7 * 4) / 8;
@@ -98,8 +97,8 @@ export function TetrisBoard() {
   };
 
   function resizeWidth() {
-    const height = (tetrisboard.current?.clientHeight || 20) - 20;
-    const width = (tetrisboard.current?.clientWidth || 20) - 20;
+    const height = (tetrisBoard.current?.clientHeight || 20) - 20;
+    const width = (tetrisBoard.current?.clientWidth || 20) - 20;
 
     setWidth(Math.min(width, height * 0.8));
   }
@@ -113,8 +112,8 @@ export function TetrisBoard() {
     if (gameState === "playing")
       utils.startGame({
         setCountDown,
-        setNextTile,
-        setTetrisLogicBoard,
+        nextTileBoard,
+        tetrisBoard,
         setGameState,
       });
     if (gameState === "paused") utils.pauseGame();
@@ -131,15 +130,12 @@ export function TetrisBoard() {
       {countDown !== undefined && (
         <div className={`${styles.countdown} t-mono`}>{countDown}</div>
       )}
-      <ShowBoard boxWidth={(boxWidth * 3) / 4} nextTile={nextTile} />
-      <div className={styles.tetrisboard} ref={tetrisboard} style={style}>
-        {tetrisLogicBoard.map((o, i) => (
+      <ShowBoard boxWidth={(boxWidth * 3) / 4} nextTileBoard={nextTileBoard} />
+      <div className={styles.tetrisboard} ref={tetrisBoard} style={style}>
+        {newBoard(8, 10).map((o, i) => (
           <>
             {o.map((e, idx) => (
-              <div
-                key={i * 8 + idx}
-                className={`${styles[utils.colorMap[e]]}`}
-              />
+              <div key={i * 8 + idx} className={styles.none} />
             ))}
           </>
         ))}
@@ -148,7 +144,7 @@ export function TetrisBoard() {
   );
 }
 
-export function ShowBoard({ boxWidth, nextTile }: showboard) {
+export function ShowBoard({ boxWidth, nextTileBoard }: showboard) {
   const style: React.CSSProperties = {
     gridTemplateColumns: `repeat(4, ${boxWidth}px)`,
     gridAutoRows: `${boxWidth}px`,
@@ -157,14 +153,11 @@ export function ShowBoard({ boxWidth, nextTile }: showboard) {
   return (
     <div className={styles.showboard}>
       <div className={styles.nextTileContainer}>
-        <div className={styles.nextTile} style={style}>
-          {nextTile.map((o, i) => (
+        <div ref={nextTileBoard} className={styles.nextTile} style={style}>
+          {newBoard(4, 4).map((o, i) => (
             <>
               {o.map((e, idx) => (
-                <div
-                  key={i * 4 + idx}
-                  className={`${styles[utils.colorMap[e]]}`}
-                />
+                <div key={i * 4 + idx} className={styles.none} />
               ))}
             </>
           ))}
