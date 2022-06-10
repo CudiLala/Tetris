@@ -65,6 +65,10 @@
   src: url("../fonts/Poppins/Poppins-ExtraBoldItalic.ttf");
 }
 @font-face {
+  font-family: SourceCode;
+  src: url("../fonts/SourceCode/static/SourceCodePro-Regular.ttf");
+}
+@font-face {
   font-family: Inika;
   src: url("../fonts/Inika/Inika-Regular.ttf");
 }
@@ -263,7 +267,7 @@ input:hover {
 }
 
 .t-mono {
-  font-family: SourceCode, consolas, monospace;
+  font-family: SourceCode, consolas, UbuntuMono, monospace;
   font-weight: 400;
 }
 

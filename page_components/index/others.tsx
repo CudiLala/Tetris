@@ -9,7 +9,7 @@ import {
   PlayIcon,
   VolumeIcon,
 } from "components/icons";
-import {
+import React, {
   useEffect,
   useRef,
   useState,
@@ -18,6 +18,7 @@ import {
 } from "react";
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
+import { utils } from ".";
 
 export function BestToday() {
   return (
@@ -51,7 +52,7 @@ export function Instruction() {
       <Controls impotent />
       <div className={styles.spacer} />
       <div className={styles.text}>
-        Use the space bar or pause button to pause
+        Use the space bar or pause button to pause and resume
       </div>
     </div>
   );
@@ -81,7 +82,14 @@ export function Controls({ impotent }: controls) {
 
 export function TetrisBoard() {
   const [width, setWidth] = useState(0);
+  const [gameState, setGameState] = useContext(gameStateContext);
+
   const tetrisboard = useRef<HTMLDivElement>(null);
+  const [tetrisLogicBoard, setTetrisLogicBoard] = useState<number[][]>(
+    utils.newBoard(8, 10)
+  );
+  const [nextTile, setNextTile] = useState<number[][]>(utils.newBoard(4, 4));
+  const [countDown, setCountDown] = useState<number>();
 
   const boxWidth = (width - 7 * 4) / 8;
   const style: React.CSSProperties = {
@@ -96,28 +104,51 @@ export function TetrisBoard() {
     setWidth(Math.min(width, height * 0.8));
   }
 
+  /*eslint-disable*/
   useLayoutEffect(() => {
     resizeWidth();
   }, []);
 
   useEffect(() => {
+    if (gameState === "playing")
+      utils.startGame({
+        setCountDown,
+        setNextTile,
+        setTetrisLogicBoard,
+        setGameState,
+      });
+    if (gameState === "paused") utils.pauseGame();
+  }, [gameState]);
+
+  useEffect(() => {
     window.addEventListener("resize", resizeWidth);
     return () => window.addEventListener("resize", resizeWidth);
   }, []);
+  /*eslint-enable*/
 
   return (
     <div className={styles.gameboard}>
-      <ShowBoard boxWidth={(boxWidth * 3) / 4} />
+      {countDown !== undefined && (
+        <div className={`${styles.countdown} t-mono`}>{countDown}</div>
+      )}
+      <ShowBoard boxWidth={(boxWidth * 3) / 4} nextTile={nextTile} />
       <div className={styles.tetrisboard} ref={tetrisboard} style={style}>
-        {new Array(80).fill(0).map((e, idx) => (
-          <div key={idx} />
+        {tetrisLogicBoard.map((o, i) => (
+          <>
+            {o.map((e, idx) => (
+              <div
+                key={i * 8 + idx}
+                className={`${styles[utils.colorMap[e]]}`}
+              />
+            ))}
+          </>
         ))}
       </div>
     </div>
   );
 }
 
-export function ShowBoard({ boxWidth }: showboard) {
+export function ShowBoard({ boxWidth, nextTile }: showboard) {
   const style: React.CSSProperties = {
     gridTemplateColumns: `repeat(4, ${boxWidth}px)`,
     gridAutoRows: `${boxWidth}px`,
@@ -127,8 +158,15 @@ export function ShowBoard({ boxWidth }: showboard) {
     <div className={styles.showboard}>
       <div className={styles.nextTileContainer}>
         <div className={styles.nextTile} style={style}>
-          {new Array(16).fill(0).map((e, idx) => (
-            <div key={idx} />
+          {nextTile.map((o, i) => (
+            <>
+              {o.map((e, idx) => (
+                <div
+                  key={i * 4 + idx}
+                  className={`${styles[utils.colorMap[e]]}`}
+                />
+              ))}
+            </>
           ))}
         </div>
       </div>
@@ -143,11 +181,11 @@ export function ShowBoard({ boxWidth }: showboard) {
       <div className={styles.infoContainer}>
         <div>
           <div className={`${styles.score} ${styles.info} t-mono`}>
-            <div>Score:</div>
+            <div>Sc:</div>
             <div>&ensp;XXX</div>
           </div>
           <div className={`${styles.level} ${styles.info} t-mono`}>
-            <div>Level:</div>
+            <div>Lv:</div>
             <div>&ensp;XX</div>
           </div>
         </div>

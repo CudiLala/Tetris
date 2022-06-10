@@ -11,4 +11,5 @@ export interface arrow extends controls {
 
 export interface showboard {
   boxWidth: number;
+  nextTile: number[][];
 }

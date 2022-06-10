@@ -107,6 +107,36 @@
   height: 80vh;
   margin: 0.5rem 0;
 }
+.gameboard div.none {
+  background-color: var(--color-white-glass-one);
+}
+.gameboard div.red {
+  background-color: rgb(255, 80, 109);
+}
+.gameboard div.green {
+  background-color: rgb(44, 207, 93);
+}
+.gameboard div.blue {
+  background-color: rgb(44, 202, 207);
+}
+.gameboard div.purple {
+  background-color: rgb(195, 106, 255);
+}
+.gameboard div.orange {
+  background-color: rgb(255, 142, 66);
+}
+
+.gameboard .countdown {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  font-size: 30vh;
+  color: rgba(255, 255, 255, 0.6);
+}
 
 .tetrisboard {
   display: grid;
@@ -119,7 +149,6 @@
 
 .tetrisboard div {
   border-radius: 30%;
-  background-color: var(--color-white-glass-one);
 }
 
 .showboard {
@@ -135,7 +164,6 @@
 }
 .showboard .nextTile div {
   border-radius: 30%;
-  background-color: var(--color-white-glass-one);
 }
 
 .showboard .pauseAndMuteContainer {
