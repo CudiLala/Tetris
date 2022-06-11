@@ -127,7 +127,7 @@ function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
 }
 
 function paint() {
-  const { rowMap, width, height } = getTileAbsoluteMap();
+  const { rowMap } = getTileAbsoluteMap();
   const dummyBoard: number[][] = clone(game.logicBoardStore);
   const color = getColor(game.currentTile);
 
@@ -318,12 +318,12 @@ function isBlockedLeft(board?: number[][]) {
   iloop: for (let key in rowMap) {
     let i = Number(key);
 
-    for (let j = 0; j < rowMap[i].length; j++) {
+    jloop: for (let j = 0; j < rowMap[i].length; j++) {
       if (rowMap[i][j] === 0) {
         blocked = true;
         break iloop;
       }
-      if (i < 0) continue;
+      if (i < 0) continue jloop;
 
       blocked = !!game.logicBoardStore[i][rowMap[i][j] - 1];
       if (blocked) break iloop;
@@ -332,6 +332,7 @@ function isBlockedLeft(board?: number[][]) {
 
   return blocked;
 }
+
 function isBlockedRight(board?: number[][]) {
   const { rowMap } = getTileAbsoluteMap(board);
   let blocked = false;
@@ -339,12 +340,12 @@ function isBlockedRight(board?: number[][]) {
   iloop: for (let key in rowMap) {
     let i = Number(key);
 
-    for (let j = 0; j < rowMap[i].length; j++) {
+    jloop: for (let j = 0; j < rowMap[i].length; j++) {
       if (rowMap[i][j] === 7) {
         blocked = true;
         break iloop;
       }
-      if (i < 0) continue;
+      if (i < 0) continue jloop;
 
       blocked = !!game.logicBoardStore[i][rowMap[i][j] + 1];
       if (blocked) break iloop;
