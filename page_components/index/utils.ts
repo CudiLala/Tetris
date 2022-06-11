@@ -88,10 +88,10 @@ function prepareGame(setGameState: startFnArgs["setGameState"]) {
   GameEvent.subscribe(
     "dropped",
     () => {
-      reloadTile();
+      handleGameOver();
       storeLogicBoard();
       resetCursor();
-      handleGameOver();
+      reloadTile();
     },
     "drop event"
   );
@@ -106,6 +106,8 @@ function prepareGame(setGameState: startFnArgs["setGameState"]) {
     },
     "end event"
   );
+
+  window.addEventListener("keydown", handleKeyControls);
 }
 
 function startCountDown(setCountDown: startFnArgs["setCountDown"]) {
@@ -167,7 +169,7 @@ function handleGameOver() {
 
 function isGameOver() {
   const { height } = game.currentTileMap;
-  if (isBlockedBown() && cursor.bottom - 1 < height) return true;
+  if (isBlockedBown() && cursor.bottom < height - 1) return true;
   return false;
 }
 
@@ -241,7 +243,9 @@ function getTileMap(board?: number[][]): TileMap {
 }
 
 function getTileAbsoluteMap(board?: number[][]): TileMap {
-  const { rowMap, width, height } = getTileMap(board);
+  const { rowMap, width, height } = board
+    ? getTileMap(board)
+    : game.currentTileMap;
   const newMap: NumPosMap = {};
 
   for (let i = 0; i < height; i++) {
@@ -308,10 +312,46 @@ function isBlockedBown(board?: number[][]) {
 }
 
 function isBlockedLeft(board?: number[][]) {
-  return true;
+  const { rowMap } = getTileAbsoluteMap(board);
+  let blocked = false;
+
+  iloop: for (let key in rowMap) {
+    let i = Number(key);
+
+    for (let j = 0; j < rowMap[i].length; j++) {
+      if (rowMap[i][j] === 0) {
+        blocked = true;
+        break iloop;
+      }
+      if (i < 0) continue;
+
+      blocked = !!game.logicBoardStore[i][rowMap[i][j] - 1];
+      if (blocked) break iloop;
+    }
+  }
+
+  return blocked;
 }
-function isBlockedRight() {
-  return true;
+function isBlockedRight(board?: number[][]) {
+  const { rowMap } = getTileAbsoluteMap(board);
+  let blocked = false;
+
+  iloop: for (let key in rowMap) {
+    let i = Number(key);
+
+    for (let j = 0; j < rowMap[i].length; j++) {
+      if (rowMap[i][j] === 7) {
+        blocked = true;
+        break iloop;
+      }
+      if (i < 0) continue;
+
+      blocked = !!game.logicBoardStore[i][rowMap[i][j] + 1];
+      if (blocked) break iloop;
+    }
+  }
+
+  return blocked;
 }
 
 export function pauseGame() {
@@ -395,6 +435,7 @@ function rotate(board: number[][], num: number): number[][] {
 function unsubscribeFromEvents() {
   GameEvent.unsubscribe("drop event");
   GameEvent.unsubscribe("end event");
+  window.removeEventListener("keydown", handleKeyControls);
 }
 
 function resetGame() {
@@ -428,6 +469,15 @@ export function runControls(text: arrowText) {
     if (text === "Drop") dropTile();
     if (text === "Rotate") rotateTile();
     if (text === "Right") moveTileRight();
+  }
+}
+
+function handleKeyControls(e: KeyboardEvent) {
+  if (game.state === "playing") {
+    if (e.key === "ArrowLeft") moveTileLeft();
+    if (e.key === "ArrowDown") dropTile();
+    if (e.key === "ArrowUp") rotateTile();
+    if (e.key === "ArrowRight") moveTileRight();
   }
 }
 
