@@ -2,6 +2,7 @@ import React from "react";
 import { gameStates } from "types/pages";
 import styles from "styles/components/gameplay.module.css";
 import GameEvent from "./events";
+import { arrowText } from "types/components/gameplay";
 
 type NumPosMap = { [key: number]: number[] };
 type TileMap = {
@@ -28,7 +29,7 @@ interface startFnArgs {
   setGameState: React.Dispatch<React.SetStateAction<gameStates>>;
 }
 
-const game: game = {
+let game: game = {
   new: true,
   state: "to begin",
   level: 1,
@@ -39,12 +40,14 @@ const game: game = {
   currentTileMap: { rowMap: {}, width: 0, height: 0 },
 };
 
-const timers = {
+let timers = {
   lastDropTime: 0,
   lastShiftTime: 0,
+  animationId: 0,
+  lastCheckTime: 0,
 };
 
-const cursor = {
+let cursor = {
   bottom: -1,
   left: 2,
 };
@@ -55,27 +58,30 @@ export async function startGame({
   tetrisBoard,
   setGameState,
 }: startFnArgs) {
-  if (game.new) prepareGame();
+  if (game.new) prepareGame(setGameState);
   await startCountDown(setCountDown);
+  game.state = "playing";
 
   function run(timestamp: number) {
-    paint();
-    handleTileDownwardMovement(timestamp);
+    if (game.state === "playing") {
+      paint();
+      handleTileDownwardMovement(timestamp);
+    }
+
     paintDom(tetrisBoard, nextTileBoard);
 
     return requestAnimationFrame(run);
   }
 
-  requestAnimationFrame(run);
+  timers.animationId = requestAnimationFrame(run);
 }
 
-function prepareGame() {
+function prepareGame(setGameState: startFnArgs["setGameState"]) {
   game.currentTile = createTile();
   game.nextTile = createTile();
   game.currentTileMap = getCurrentTileMap();
 
   game.new = false;
-  game.state = "playing";
 
   resetCursor();
 
@@ -85,8 +91,20 @@ function prepareGame() {
       reloadTile();
       storeLogicBoard();
       resetCursor();
+      handleGameOver();
     },
     "drop event"
+  );
+
+  GameEvent.subscribe(
+    "ended",
+    () => {
+      unsubscribeFromEvents();
+      resetGame();
+      setGameState("ended");
+      cancelAnimationFrame(timers.animationId);
+    },
+    "end event"
   );
 }
 
@@ -262,6 +280,13 @@ function isBlockedBown() {
   return blocked;
 }
 
+function isBlockedLeft() {
+  return true;
+}
+function isBlockedRight() {
+  return true;
+}
+
 export function pauseGame() {
   game.state = "paused";
 }
@@ -338,6 +363,68 @@ function rotate(board: number[][], num: number): number[][] {
   }
 
   return rotate(freshBoard, num - 1);
+}
+
+function handleGameOver() {
+  if (isGameOver()) GameEvent.emit("ended");
+}
+
+function isGameOver() {
+  const { height } = game.currentTileMap;
+  if (isBlockedBown() && cursor.bottom - 1 < height) return true;
+  return false;
+}
+
+function unsubscribeFromEvents() {
+  GameEvent.unsubscribe("drop event");
+  GameEvent.unsubscribe("end event");
+}
+
+function resetGame() {
+  game = {
+    new: true,
+    state: "to begin",
+    level: 1,
+    nextTile: newBoard(4, 4),
+    currentTile: newBoard(4, 4),
+    logicBoard: newBoard(8, 10),
+    logicBoardStore: newBoard(8, 10),
+    currentTileMap: { rowMap: {}, width: 0, height: 0 },
+  };
+
+  timers = {
+    lastDropTime: 0,
+    lastShiftTime: 0,
+    lastCheckTime: 0,
+    animationId: 0,
+  };
+
+  cursor = {
+    bottom: -1,
+    left: 2,
+  };
+}
+
+function moveTileLeft() {
+  if (!isBlockedLeft()) cursor.left--;
+}
+function dropTile() {
+  console.log("clicked drop");
+}
+function rotateTile() {
+  console.log("clicked rotate");
+}
+function moveTileRight() {
+  if (!isBlockedRight()) cursor.left++;
+}
+
+export function runControls(text: arrowText) {
+  if (game.state === "playing") {
+    if (text === "Left") moveTileLeft();
+    if (text === "Drop") dropTile();
+    if (text === "Rotate") rotateTile();
+    if (text === "Right") moveTileRight();
+  }
 }
 
 export function newBoard(width: number, height: number): number[][] {

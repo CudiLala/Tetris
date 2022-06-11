@@ -5,6 +5,7 @@ export default function GameDisplay({ visible }: { visible: boolean }) {
   const className = `${styles.gameDisplay} ${
     visible ? styles.visible : styles.invisible
   }`;
+
   return (
     <div className={className}>
       <TetrisBoard />

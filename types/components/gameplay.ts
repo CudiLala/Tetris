@@ -1,12 +1,15 @@
 import React from "react";
 
+export type arrowText = "Left" | "Drop" | "Rotate" | "Right";
+
 export interface controls {
   impotent?: boolean;
 }
 
-export interface arrow extends controls {
+export interface arrow {
   Arrow: React.ReactElement;
-  text?: string;
+  impotent?: boolean;
+  text: arrowText;
 }
 
 export interface showboard {

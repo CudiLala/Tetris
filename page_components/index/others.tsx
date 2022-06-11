@@ -19,7 +19,7 @@ import React, {
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
 // import { utils } from ".";
-import { newBoard, pauseGame, startGame } from "./utils";
+import { newBoard, pauseGame, runControls, startGame } from "./utils";
 
 export function BestToday() {
   return (
@@ -61,7 +61,11 @@ export function Instruction() {
 
 function Arrow({ Arrow, impotent, text }: arrow) {
   return (
-    <div className={styles.arrowContainer} tabIndex={0}>
+    <div
+      className={styles.arrowContainer}
+      tabIndex={0}
+      onMouseDown={() => runControls(text)}
+    >
       <div className={styles.arrow}>{Arrow}</div>
       {impotent && (
         <div className={`${styles.text} t-xlight noSelection`}>{text}</div>
