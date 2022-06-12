@@ -96,7 +96,7 @@ const tetrominoes: tetrominoes = [
       },
       offset: { x: 1, y: 1 },
       height: 4,
-      width: 2,
+      width: 1,
     },
     {
       map: {
