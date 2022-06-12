@@ -32,8 +32,6 @@ function createTetromino() {
   return { type, rotation, color };
 }
 
-function dropTile() {}
-
 function generateEmptyBoard(width: number, height: number): number[][] {
   return new Array(height).fill(0).map((e) => new Array(width).fill(0));
 }
@@ -45,8 +43,34 @@ function handleGameOver() {
 function handleTetrominoDownwardMovement(timestamp: number) {
   if (timestamp - timers.lastDropTime > 1000 - (game.level - 1) * 100) {
     timers.lastDropTime = timestamp;
-    moveTileDown();
+    moveTetrominoDown();
   }
+}
+
+function isBlocked(tetromino: tetromino, cursorX: number, cursorY: number) {
+  const tetrominoMap = addPositions(tetromino, cursorX, cursorY).map;
+  let blocked = false;
+
+  iloop: for (let key in tetrominoMap) {
+    let i = Number(key);
+    if (i > 9) {
+      blocked = true;
+      break iloop;
+    }
+
+    jloop: for (let j = 0; j < tetrominoMap[i].length; j++) {
+      if (tetrominoMap[i][j] < 0 || tetrominoMap[i][j] > 7) {
+        blocked = true;
+        break iloop;
+      }
+      if (i < 0) continue jloop;
+
+      blocked = !!game.logicBoardStore[i][tetrominoMap[i][j]];
+      if (blocked) break iloop;
+    }
+  }
+
+  return blocked;
 }
 
 function isBlockedDown() {
@@ -128,32 +152,6 @@ function isBlockedRight() {
   return blocked;
 }
 
-function isBlocked(tetromino: tetromino, cursorX: number, cursorY: number) {
-  const tetrominoMap = addPositions(tetromino, cursorX, cursorY).map;
-  let blocked = false;
-
-  iloop: for (let key in tetrominoMap) {
-    let i = Number(key);
-    if (i > 9) {
-      blocked = true;
-      break iloop;
-    }
-
-    jloop: for (let j = 0; j < tetrominoMap[i].length; j++) {
-      if (tetrominoMap[i][j] < 0 || tetrominoMap[i][j] > 7) {
-        blocked = true;
-        break iloop;
-      }
-      if (i < 0) continue jloop;
-
-      blocked = !!game.logicBoardStore[i][tetrominoMap[i][j]];
-      if (blocked) break iloop;
-    }
-  }
-
-  return blocked;
-}
-
 function isGameOver() {
   const { type, rotation } = game.currentPiece;
   if (isBlockedDown() && cursor.y < tetrominoes[type][rotation].height - 1)
@@ -161,17 +159,38 @@ function isGameOver() {
   return false;
 }
 
-function moveTileDown() {
+function moveTetrominoDown() {
   if (!isBlockedDown()) return cursor.y++;
   GameEvent.emit("dropped");
 }
 
-function moveTileLeft() {
+function moveTetrominoLeft() {
   if (!isBlockedLeft()) cursor.x--;
 }
 
-function moveTileRight() {
+function moveTetrominoRight() {
   if (!isBlockedRight()) cursor.x++;
+}
+
+function obtainKicks(tetromino: tetromino, cursor: { x: number; y: number }) {
+  const kicks = { x: 0, y: 0 };
+  let canRotate = false;
+
+  const length = 2 * Math.max(tetromino.width, tetromino.height) - 3;
+
+  iloop: for (let i = 0; i < length; i++) {
+    for (let j = 0; j < length; j++) {
+      kicks.y = i % 2 ? Math.ceil(i / 2) : -i / 2;
+      kicks.x = j % 2 ? Math.ceil(j / 2) : -j / 2;
+
+      canRotate = !isBlocked(tetromino, cursor.x + kicks.x, cursor.y + kicks.y);
+
+      if (canRotate) break iloop;
+    }
+  }
+
+  if (!canRotate) return undefined;
+  return kicks;
 }
 
 function paintBoardsToDOM(
@@ -299,6 +318,7 @@ function resetCursor() {
 function resetGame() {
   game.new = true;
   game.state = "to begin";
+  game.canDrop = false;
   game.level = 1;
   game.logicBoard = generateEmptyBoard(8, 10);
   game.logicBoardStore = generateEmptyBoard(8, 10);
@@ -313,59 +333,58 @@ function resetGame() {
   cursor.y = -1;
 }
 
-function rotateTile() {
+function rotateTetrominoClockwise() {
   const clonedPiece = clone(game.currentPiece);
-  clonedPiece.rotation++;
-  clonedPiece.rotation %= 4;
+  clonedPiece.rotation = (((clonedPiece.rotation + 1) % 4) + 4) % 4;
 
   const clonedCursor = clone(cursor);
   const clonedTetromino = tetrominoes[clonedPiece.type][clonedPiece.rotation];
   clonedCursor.x += clonedTetromino.offset.x;
   clonedCursor.y += clonedTetromino.offset.y;
 
-  let xKick = 0;
-  let yKick = 0;
-  let canRotate: boolean = false;
-  const length =
-    2 * Math.max(clonedTetromino.width, clonedTetromino.height) - 3;
+  const kicks = obtainKicks(clonedTetromino, clonedCursor);
 
-  iloop: for (let i = 0; i < length; i++) {
-    for (let j = 0; j < length; j++) {
-      yKick = i % 2 ? Math.ceil(i / 2) : -i / 2;
-      xKick = j % 2 ? Math.ceil(j / 2) : -j / 2;
-
-      canRotate = !isBlocked(
-        clonedTetromino,
-        clonedCursor.x + xKick,
-        clonedCursor.y + yKick
-      );
-
-      if (canRotate) break iloop;
-    }
-  }
-
-  if (!canRotate) return;
+  if (!kicks) return;
   game.currentPiece = clone(clonedPiece);
-  cursor.x = clonedCursor.x + xKick;
-  cursor.y = clonedCursor.y + yKick;
+  cursor.x = clonedCursor.x + kicks.x;
+  cursor.y = clonedCursor.y + kicks.y;
+}
+
+function rotateTetrominoAntiClockwise() {
+  const clonedPiece = clone(game.currentPiece);
+  const originalRoatation = clonedPiece.rotation;
+  clonedPiece.rotation = (((clonedPiece.rotation - 1) % 4) + 4) % 4;
+
+  const clonedCursor = clone(cursor);
+  const rotatedTetromino = tetrominoes[clonedPiece.type][clonedPiece.rotation];
+  const clonedTetromino = tetrominoes[clonedPiece.type][originalRoatation];
+  clonedCursor.x -= clonedTetromino.offset.x;
+  clonedCursor.y -= clonedTetromino.offset.y;
+
+  const kicks = obtainKicks(rotatedTetromino, clonedCursor);
+
+  if (!kicks) return;
+  game.currentPiece = clone(clonedPiece);
+  cursor.x = clonedCursor.x + kicks.x;
+  cursor.y = clonedCursor.y + kicks.y;
 }
 
 function runKeyControls(e: KeyboardEvent) {
   if (game.state === "playing") {
-    if (e.key === "ArrowLeft") moveTileLeft();
-    if (e.key === "ArrowDown") dropTile();
-    if (e.key === "ArrowUp") rotateTile();
-    if (e.key === "ArrowRight") moveTileRight();
+    if (e.key === "ArrowLeft") moveTetrominoLeft();
+    if (e.key === "ArrowDown") rotateTetrominoAntiClockwise();
+    if (e.key === "ArrowUp") rotateTetrominoClockwise();
+    if (e.key === "ArrowRight") moveTetrominoRight();
     if (e.key === " ") pauseGame();
   }
 }
 
 function runMouseControls(text: arrowText) {
   if (game.state === "playing") {
-    if (text === "Left") moveTileLeft();
-    if (text === "Drop") dropTile();
-    if (text === "Rotate") rotateTile();
-    if (text === "Right") moveTileRight();
+    if (text === "Left") moveTetrominoLeft();
+    if (text === "L/Rotate") rotateTetrominoAntiClockwise();
+    if (text === "R/Rotate") rotateTetrominoClockwise();
+    if (text === "Right") moveTetrominoRight();
   }
 }
 

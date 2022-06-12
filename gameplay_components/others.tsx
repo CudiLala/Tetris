@@ -82,8 +82,8 @@ export function Controls({ impotent }: controls) {
   return (
     <div className={styles.controls}>
       <Arrow Arrow={<GameArrowLeft />} impotent={impotent} text="Left" />
-      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Drop" />
-      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="Rotate" />
+      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="L/Rotate" />
+      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="R/Rotate" />
       <Arrow Arrow={<GameArrowRight />} impotent={impotent} text="Right" />
     </div>
   );

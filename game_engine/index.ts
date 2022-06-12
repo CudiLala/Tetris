@@ -24,6 +24,7 @@ export const game = {
   new: true,
   state: "to begin",
   level: 1,
+  canDrop: false,
   logicBoard: generateEmptyBoard(8, 10),
   logicBoardStore: generateEmptyBoard(8, 10),
   nextTileBoard: generateEmptyBoard(4, 4),
