@@ -60,7 +60,7 @@ export async function startGame({
 }: startFnArgs) {
   if (game.new) prepareGame(setGameState);
   await startCountDown(setCountDown);
-  game.state = "playing";
+  GameEvent.emit("started");
 
   function run(timestamp: number) {
     if (game.state === "playing") {
@@ -86,6 +86,24 @@ function prepareGame(setGameState: startFnArgs["setGameState"]) {
   resetCursor();
 
   GameEvent.subscribe(
+    "started",
+    () => {
+      game.state === "playing";
+      setGameState("playing");
+    },
+    "start event"
+  );
+
+  GameEvent.subscribe(
+    "paused",
+    () => {
+      game.state === "paused";
+      setGameState("paused");
+    },
+    "pause event"
+  );
+
+  GameEvent.subscribe(
     "dropped",
     () => {
       handleGameOver();
@@ -99,6 +117,7 @@ function prepareGame(setGameState: startFnArgs["setGameState"]) {
   GameEvent.subscribe(
     "ended",
     () => {
+      game.state === "ended";
       unsubscribeFromEvents();
       resetGame();
       setGameState("ended");

@@ -1,9 +1,9 @@
-import Display from "page_components/index";
+import Display from "gameplay_components/index";
+import { useContext } from "react";
+import { gameStateContext } from "../app";
 import styles from "styles/components/gameplay.module.css";
-import React, { useContext } from "react";
-import { gameStateContext } from "components/app";
 
-export default function GamePlay() {
+export function GamePlay() {
   const [gameState] = useContext(gameStateContext);
   return (
     <div className={styles.gameplay}>

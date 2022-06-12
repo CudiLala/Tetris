@@ -18,8 +18,12 @@ import React, {
 } from "react";
 import styles from "styles/components/gameplay.module.css";
 import { arrow, controls, showboard } from "types/components/gameplay";
-// import { utils } from ".";
-import { newBoard, pauseGame, runControls, startGame } from "./utils";
+import {
+  startGame,
+  pauseGame,
+  runMouseControls,
+  generateEmptyBoard,
+} from "game_engine";
 
 export function BestToday() {
   return (
@@ -64,7 +68,7 @@ function Arrow({ Arrow, impotent, text }: arrow) {
     <div
       className={styles.arrowContainer}
       tabIndex={0}
-      onMouseDown={() => runControls(text)}
+      onMouseDown={() => runMouseControls(text)}
     >
       <div className={styles.arrow}>{Arrow}</div>
       {impotent && (
@@ -136,7 +140,7 @@ export function TetrisBoard() {
       )}
       <ShowBoard boxWidth={(boxWidth * 3) / 4} nextTileBoard={nextTileBoard} />
       <div className={styles.tetrisboard} ref={tetrisBoard} style={style}>
-        {newBoard(8, 10).map((o, i) => (
+        {generateEmptyBoard(8, 10).map((o, i) => (
           <>
             {o.map((e, idx) => (
               <div key={i * 8 + idx} className={styles.none} />
@@ -158,7 +162,7 @@ export function ShowBoard({ boxWidth, nextTileBoard }: showboard) {
     <div className={styles.showboard}>
       <div className={styles.nextTileContainer}>
         <div ref={nextTileBoard} className={styles.nextTile} style={style}>
-          {newBoard(4, 4).map((o, i) => (
+          {generateEmptyBoard(4, 4).map((o, i) => (
             <>
               {o.map((e, idx) => (
                 <div key={i * 4 + idx} className={styles.none} />
