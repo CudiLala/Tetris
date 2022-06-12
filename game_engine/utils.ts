@@ -134,13 +134,17 @@ function isBlocked(tetromino: tetromino, cursorX: number, cursorY: number) {
 
   iloop: for (let key in tetrominoMap) {
     let i = Number(key);
+    if (i > 9) {
+      blocked = true;
+      break iloop;
+    }
 
-    for (let j = 0; j < tetrominoMap[i].length; j++) {
+    jloop: for (let j = 0; j < tetrominoMap[i].length; j++) {
       if (tetrominoMap[i][j] < 0 || tetrominoMap[i][j] > 7) {
         blocked = true;
         break iloop;
       }
-      if (i < 0) continue;
+      if (i < 0) continue jloop;
 
       blocked = !!game.logicBoardStore[i][tetrominoMap[i][j]];
       if (blocked) break iloop;
@@ -316,11 +320,13 @@ function rotateTile() {
 
   const clonedCursor = clone(cursor);
   const clonedTetromino = tetrominoes[clonedPiece.type][clonedPiece.rotation];
+  clonedCursor.x += clonedTetromino.offset.x;
+  clonedCursor.y += clonedTetromino.offset.y;
 
-  if (isBlocked(clonedTetromino, cursor.x, cursor.y)) return;
+  if (isBlocked(clonedTetromino, clonedCursor.x, clonedCursor.y)) return;
   game.currentPiece = clone(clonedPiece);
-  cursor.x += clonedTetromino.offset.x;
-  cursor.y += clonedTetromino.offset.y;
+  cursor.x = clonedCursor.x;
+  cursor.y = clonedCursor.y;
 }
 
 function runKeyControls(e: KeyboardEvent) {
