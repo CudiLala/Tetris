@@ -323,10 +323,31 @@ function rotateTile() {
   clonedCursor.x += clonedTetromino.offset.x;
   clonedCursor.y += clonedTetromino.offset.y;
 
-  if (isBlocked(clonedTetromino, clonedCursor.x, clonedCursor.y)) return;
+  let xKick = 0;
+  let yKick = 0;
+  let canRotate: boolean = false;
+  const length =
+    2 * Math.max(clonedTetromino.width, clonedTetromino.height) - 3;
+
+  iloop: for (let i = 0; i < length; i++) {
+    for (let j = 0; j < length; j++) {
+      yKick = i % 2 ? Math.ceil(i / 2) : -i / 2;
+      xKick = j % 2 ? Math.ceil(j / 2) : -j / 2;
+
+      canRotate = !isBlocked(
+        clonedTetromino,
+        clonedCursor.x + xKick,
+        clonedCursor.y + yKick
+      );
+
+      if (canRotate) break iloop;
+    }
+  }
+
+  if (!canRotate) return;
   game.currentPiece = clone(clonedPiece);
-  cursor.x = clonedCursor.x;
-  cursor.y = clonedCursor.y;
+  cursor.x = clonedCursor.x + xKick;
+  cursor.y = clonedCursor.y + yKick;
 }
 
 function runKeyControls(e: KeyboardEvent) {
@@ -388,7 +409,9 @@ async function startGame({
 }
 
 function storeLogicBoard() {
-  game.logicBoardStore = clone(game.logicBoard);
+  game.logicBoardStore = clone(game.logicBoard).map((e) =>
+    [...e].map((e) => (e ? 6 : e))
+  );
 }
 
 function unsubscribeFromEvents() {
