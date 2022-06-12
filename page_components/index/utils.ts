@@ -169,12 +169,12 @@ function handleGameOver() {
 
 function isGameOver() {
   const { height } = game.currentTileMap;
-  if (isBlockedBown() && cursor.bottom < height - 1) return true;
+  if (isBlockedDown() && cursor.bottom < height - 1) return true;
   return false;
 }
 
 function moveTileDown() {
-  if (isBlockedBown()) {
+  if (isBlockedDown()) {
     GameEvent.emit("dropped");
     return;
   }
@@ -191,7 +191,13 @@ function dropTile() {
 }
 
 function rotateTile() {
-  console.log("clicked rotate");
+  const newTile = rotate(game.currentTile, 1);
+  const fakeCursor = clone(cursor);
+
+  if (!isBlocked(newTile)) {
+    game.currentTile = clone(newTile);
+    game.currentTileMap = getTileMap();
+  }
 }
 
 function moveTileRight() {
@@ -291,7 +297,7 @@ function resetCursor() {
   cursor.left = 4 - Math.ceil(game.currentTileMap.width / 2);
 }
 
-function isBlockedBown(board?: number[][]) {
+function isBlockedDown(board?: number[][]) {
   const { rowMap } = getTileAbsoluteMap(board);
   let blocked = false;
 
@@ -348,6 +354,28 @@ function isBlockedRight(board?: number[][]) {
       if (i < 0) continue jloop;
 
       blocked = !!game.logicBoardStore[i][rowMap[i][j] + 1];
+      if (blocked) break iloop;
+    }
+  }
+
+  return blocked;
+}
+
+function isBlocked(board?: number[][]) {
+  const { rowMap } = getTileAbsoluteMap(board);
+  let blocked = false;
+
+  iloop: for (let key in rowMap) {
+    let i = Number(key);
+
+    for (let j = 0; j < rowMap[i].length; j++) {
+      if (rowMap[i][j] < 0 || rowMap[i][j] > 7) {
+        blocked = true;
+        break iloop;
+      }
+      if (i < 0) continue;
+
+      blocked = !!game.logicBoardStore[i][rowMap[i][j]];
       if (blocked) break iloop;
     }
   }
@@ -493,6 +521,7 @@ export const colorMap: { [key: number]: string } = {
   [3]: "green",
   [4]: "blue",
   [5]: "purple",
+  [6]: "white",
 };
 
 function clone(item: any) {

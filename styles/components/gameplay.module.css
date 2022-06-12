@@ -125,6 +125,10 @@
 .gameboard div.orange {
   background-color: rgb(255, 142, 66);
 }
+.gameboard div.white {
+  background-color: rgb(200, 200, 200);
+  transition: all 300ms;
+}
 
 .gameboard .countdown {
   position: absolute;
