@@ -6,6 +6,9 @@ export interface StartFnArgs {
   nextTileBoard: React.RefObject<HTMLDivElement>;
   tetrisBoard: React.RefObject<HTMLDivElement>;
   setGameState: React.Dispatch<React.SetStateAction<gameStates>>;
+  setGameInfo: React.Dispatch<
+    React.SetStateAction<{ score: number; level: number }>
+  >;
 }
 
 export const colorMap: { [key: number]: string } = {

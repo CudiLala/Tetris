@@ -24,6 +24,7 @@ import {
   runMouseControls,
   generateEmptyBoard,
 } from "game_engine";
+import { gameInfoCotext } from "components/gameplay";
 
 export function BestToday() {
   return (
@@ -92,6 +93,7 @@ export function Controls({ impotent }: controls) {
 export function TetrisBoard() {
   const [width, setWidth] = useState(0);
   const [gameState, setGameState] = useContext(gameStateContext);
+  const [, setGameInfo] = useContext(gameInfoCotext);
 
   const tetrisBoard = useRef<HTMLDivElement>(null);
   const nextTileBoard = useRef<HTMLDivElement>(null);
@@ -123,6 +125,7 @@ export function TetrisBoard() {
         nextTileBoard,
         tetrisBoard,
         setGameState,
+        setGameInfo,
       });
     if (gameState === "paused") pauseGame();
   }, [gameState]);
@@ -153,6 +156,8 @@ export function TetrisBoard() {
 }
 
 export function ShowBoard({ boxWidth, nextTileBoard }: showboard) {
+  const [gameInfo] = useContext(gameInfoCotext);
+
   const style: React.CSSProperties = {
     gridTemplateColumns: `repeat(4, ${boxWidth}px)`,
     gridAutoRows: `${boxWidth}px`,
@@ -183,11 +188,11 @@ export function ShowBoard({ boxWidth, nextTileBoard }: showboard) {
         <div>
           <div className={`${styles.score} ${styles.info} t-mono`}>
             <div>Sc:</div>
-            <div>&ensp;XXX</div>
+            <div>&ensp;{gameInfo.score}</div>
           </div>
           <div className={`${styles.level} ${styles.info} t-mono`}>
             <div>Lv:</div>
-            <div>&ensp;XX</div>
+            <div>&ensp;{gameInfo.level}</div>
           </div>
         </div>
       </div>

@@ -56,13 +56,13 @@ function handleRowClear() {
   game.logicBoard = clone(newBoard);
 
   if (fullRows) {
-    game.score = fullRows ** 2 + fullRows * 8 - 1;
+    game.score += fullRows ** 2 + fullRows * 8 - 1;
     GameEvent.emit("scored");
   }
 }
 
 function handleTetrominoDownwardMovement(timestamp: number) {
-  if (timestamp - timers.lastDropTime > 1000 - (game.level - 1) * 1000) {
+  if (timestamp - timers.lastDropTime > 700 - (game.level - 1) * 50) {
     timers.lastDropTime = timestamp;
     moveTetrominoDown();
   }
@@ -272,7 +272,10 @@ function pauseGame() {
   GameEvent.emit("paused");
 }
 
-function prepareGame(setGameState: StartFnArgs["setGameState"]) {
+function prepareGame(
+  setGameState: StartFnArgs["setGameState"],
+  setGameInfo: StartFnArgs["setGameInfo"]
+) {
   game.currentPiece = createTetromino();
   game.nextPiece = createTetromino();
   game.new = false;
@@ -312,12 +315,26 @@ function prepareGame(setGameState: StartFnArgs["setGameState"]) {
   );
 
   GameEvent.subscribe(
+    "scored",
+    () => {
+      if (game.score > game.level * 20) {
+        game.level++;
+        game.state = "level change";
+        setGameState("level change");
+      }
+      setGameInfo({ score: game.score, level: game.level });
+    },
+    "score event"
+  );
+
+  GameEvent.subscribe(
     "ended",
     () => {
       game.state = "ended";
       unsubscribeFromEvents();
       resetGame();
       setGameState("ended");
+      setGameInfo({ score: 0, level: 1 });
       cancelAnimationFrame(timers.animationId);
     },
     "end event"
@@ -431,8 +448,9 @@ async function startGame({
   nextTileBoard,
   tetrisBoard,
   setGameState,
+  setGameInfo,
 }: StartFnArgs) {
-  if (game.new) prepareGame(setGameState);
+  if (game.new) prepareGame(setGameState, setGameInfo);
   await startCountDown(setCountDown);
   GameEvent.emit("started");
 
