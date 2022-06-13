@@ -40,8 +40,29 @@ function handleGameOver() {
   if (isGameOver()) GameEvent.emit("ended");
 }
 
+function handleRowClear() {
+  let fullRows = 0;
+  const newBoard: number[][] = [];
+
+  for (let i = 0; i < game.logicBoard.length; i++) {
+    if (game.logicBoard[i].every((e) => e)) fullRows++;
+    else newBoard.push(game.logicBoard[i]);
+  }
+
+  for (let i = 0; i < fullRows; i++) {
+    newBoard.unshift(new Array(8).fill(0));
+  }
+
+  game.logicBoard = clone(newBoard);
+
+  if (fullRows) {
+    game.score = fullRows ** 2 + fullRows * 8 - 1;
+    GameEvent.emit("scored");
+  }
+}
+
 function handleTetrominoDownwardMovement(timestamp: number) {
-  if (timestamp - timers.lastDropTime > 1000 - (game.level - 1) * 100) {
+  if (timestamp - timers.lastDropTime > 1000 - (game.level - 1) * 1000) {
     timers.lastDropTime = timestamp;
     moveTetrominoDown();
   }
@@ -280,6 +301,7 @@ function prepareGame(setGameState: StartFnArgs["setGameState"]) {
   GameEvent.subscribe(
     "dropped",
     () => {
+      handleRowClear();
       handleGameOver();
       storeLogicBoard();
       resetCursor();
@@ -318,7 +340,7 @@ function resetCursor() {
 function resetGame() {
   game.new = true;
   game.state = "to begin";
-  game.canDrop = false;
+  game.score = 0;
   game.level = 1;
   game.logicBoard = generateEmptyBoard(8, 10);
   game.logicBoardStore = generateEmptyBoard(8, 10);
@@ -428,9 +450,7 @@ async function startGame({
 }
 
 function storeLogicBoard() {
-  game.logicBoardStore = clone(game.logicBoard).map((e) =>
-    [...e].map((e) => (e ? 6 : e))
-  );
+  game.logicBoardStore = clone(game.logicBoard);
 }
 
 function unsubscribeFromEvents() {
