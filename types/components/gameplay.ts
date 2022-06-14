@@ -1,6 +1,12 @@
 import React from "react";
 
-export type arrowText = "Left" | "L/Rotate" | "R/Rotate" | "Right";
+export type arrowText =
+  | "Left"
+  | "L/Rotate"
+  | "R/Rotate"
+  | "Right"
+  | "Drop"
+  | "Hard Drop";
 
 export interface controls {
   impotent?: boolean;

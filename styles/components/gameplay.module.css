@@ -58,7 +58,22 @@
 
 .controls {
   display: flex;
-  margin: 0.5rem 0;
+  flex-direction: column;
+  margin: 0.25rem 0;
+}
+.controls .top,
+.controls .bottom {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  margin: 0 auto;
+  gap: 0.5rem;
+}
+.controls .top {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.controls .bottom {
+  grid-template-columns: 1fr 1fr;
 }
 .controls .arrowContainer {
   flex-grow: 1;
@@ -71,7 +86,7 @@
   background-color: var(--color-white-glass-one);
 }
 .controls .arrow {
-  height: 6vh;
+  height: 5vh;
 }
 .controls .text {
   font-size: 1.6rem;
@@ -104,8 +119,9 @@
 }
 
 .gameboard {
-  height: 80vh;
-  margin: 0.5rem 0;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
 }
 .gameboard div.none {
   background-color: var(--color-white-glass-one);
@@ -144,11 +160,11 @@
 
 .tetrisboard {
   display: grid;
-  height: 75%;
-  gap: 0.4rem;
+  gap: 0.3rem;
   justify-content: center;
   align-content: center;
   padding: 1rem;
+  flex: 1;
 }
 
 .tetrisboard div {
@@ -158,13 +174,11 @@
 .showboard {
   display: flex;
   width: 100%;
-  height: 25%;
   margin: 0 auto;
-  padding: 1rem;
 }
 .showboard .nextTile {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.2rem;
 }
 .showboard .nextTile div {
   border-radius: 30%;

@@ -4,6 +4,9 @@ import {
   GameArrowLeft,
   GameArrowRight,
   GameArrowUp,
+  GameHardDrop,
+  GameRotateAntiClockWise,
+  GameRotateClockwise,
   MuteIcon,
   PauseIcon,
   PlayIcon,
@@ -82,10 +85,24 @@ function Arrow({ Arrow, impotent, text }: arrow) {
 export function Controls({ impotent }: controls) {
   return (
     <div className={styles.controls}>
-      <Arrow Arrow={<GameArrowLeft />} impotent={impotent} text="Left" />
-      <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="L/Rotate" />
-      <Arrow Arrow={<GameArrowUp />} impotent={impotent} text="R/Rotate" />
-      <Arrow Arrow={<GameArrowRight />} impotent={impotent} text="Right" />
+      <div className={styles.top}>
+        <Arrow Arrow={<GameArrowLeft />} impotent={impotent} text="Left" />
+        <Arrow
+          Arrow={<GameRotateAntiClockWise />}
+          impotent={impotent}
+          text="L/Rotate"
+        />
+        <Arrow
+          Arrow={<GameRotateClockwise />}
+          impotent={impotent}
+          text="R/Rotate"
+        />
+        <Arrow Arrow={<GameArrowRight />} impotent={impotent} text="Right" />
+      </div>
+      <div className={styles.bottom}>
+        <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Drop" />
+        <Arrow Arrow={<GameHardDrop />} impotent={impotent} text="Drop" />
+      </div>
     </div>
   );
 }
@@ -100,7 +117,7 @@ export function TetrisBoard() {
 
   const [countDown, setCountDown] = useState<number>();
 
-  const boxWidth = (width - 7 * 4) / 8;
+  const boxWidth = (width - 7 * 3) / 8;
   const style: React.CSSProperties = {
     gridTemplateColumns: `repeat(8, ${boxWidth}px)`,
     gridAutoRows: `${boxWidth}px`,
@@ -141,7 +158,7 @@ export function TetrisBoard() {
       {countDown !== undefined && (
         <div className={`${styles.countdown} t-mono`}>{countDown}</div>
       )}
-      <ShowBoard boxWidth={(boxWidth * 3) / 4} nextTileBoard={nextTileBoard} />
+      <ShowBoard boxWidth={(boxWidth * 2) / 3} nextTileBoard={nextTileBoard} />
       <div className={styles.tetrisboard} ref={tetrisBoard} style={style}>
         {generateEmptyBoard(8, 10).map((o, i) => (
           <>
