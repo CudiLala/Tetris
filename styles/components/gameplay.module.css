@@ -253,7 +253,7 @@
   line-height: 2rem;
 }
 
-@media screen and (max-height: 600) {
+@media screen and (max-width: 420px) {
   .controls .arrow {
     width: 3rem;
     height: 3rem;
