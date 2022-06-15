@@ -100,8 +100,8 @@
 }
 
 .controls .arrow {
-  height: 5vh;
-  width: 5vh;
+  height: 3rem;
+  width: 3rem;
 }
 .controls .text {
   font-size: 1.6rem;
@@ -195,6 +195,7 @@
   width: 100%;
   margin: 0 auto;
   height: 25%;
+  justify-content: space-between;
 }
 .showboard .nextTile {
   display: grid;
@@ -241,11 +242,13 @@
 }
 
 .showboard .infoContainer .info {
-  padding: 0.3rem 2rem;
+  padding: 0.3rem 1rem;
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
   color: rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
