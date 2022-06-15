@@ -51,9 +51,12 @@
 }
 
 .instruction .text {
-  font-size: 2.2rem;
+  font-size: 2rem;
   line-height: 3rem;
   text-align: center;
+}
+.instruction .smallText {
+  font-size: 1.6rem;
 }
 
 .controls {
@@ -76,17 +79,29 @@
   grid-template-columns: 1fr 1fr;
 }
 .controls .arrowContainer {
-  flex-grow: 1;
-  padding: 1rem 1rem;
+  padding: 1rem;
   cursor: pointer;
   border-radius: 3rem;
   transition: all 500ms;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-.controls .arrowContainer:hover {
+.controls .arrowContainer:not(.impotent):hover {
   background-color: var(--color-white-glass-one);
 }
+.controls .impotent {
+  padding: 0.5rem;
+}
+
+.controls .impotent .arrow {
+  height: 4rem;
+}
+
 .controls .arrow {
   height: 5vh;
+  width: 5vh;
 }
 .controls .text {
   font-size: 1.6rem;
@@ -96,7 +111,7 @@
 .spacer {
   width: 100%;
   height: 1px;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   background-color: var(--color-white-glass-two);
 }
 
@@ -106,7 +121,6 @@
   align-items: center;
 }
 .actionButtonsBox > .button {
-  margin-top: 1.5rem;
   font-size: 3rem;
   background-color: transparent;
   color: white;
@@ -118,8 +132,12 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
+.gameDisplay {
+  height: 90vh;
+}
+
 .gameboard {
-  min-height: 70vh;
+  height: 80%;
   display: flex;
   flex-direction: column;
 }
@@ -165,6 +183,7 @@
   align-content: center;
   padding: 1rem;
   flex: 1;
+  height: 80%;
 }
 
 .tetrisboard div {
@@ -175,6 +194,7 @@
   display: flex;
   width: 100%;
   margin: 0 auto;
+  height: 20%;
 }
 .showboard .nextTile {
   display: grid;

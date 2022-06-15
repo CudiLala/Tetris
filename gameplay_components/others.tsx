@@ -60,8 +60,11 @@ export function Instruction() {
       </div>
       <Controls impotent />
       <div className={styles.spacer} />
-      <div className={styles.text}>
-        Use the space bar or pause button to pause and resume
+      <div className={styles.smallText}>
+        The left and right arrow keys for moving tetrominoes. <br />
+        The up and down arrow keys for clockwise and anti-clockwise rotation.
+        <br />
+        The SpaceBar for hard drop and Alt+SpaceBar for a drop
       </div>
     </div>
   );
@@ -70,7 +73,7 @@ export function Instruction() {
 function Arrow({ Arrow, impotent, text }: arrow) {
   return (
     <div
-      className={styles.arrowContainer}
+      className={`${styles.arrowContainer} ${impotent ? styles.impotent : ""}`}
       tabIndex={0}
       onMouseDown={() => runMouseControls(text)}
     >
@@ -101,7 +104,7 @@ export function Controls({ impotent }: controls) {
       </div>
       <div className={styles.bottom}>
         <Arrow Arrow={<GameArrowDown />} impotent={impotent} text="Drop" />
-        <Arrow Arrow={<GameHardDrop />} impotent={impotent} text="Drop" />
+        <Arrow Arrow={<GameHardDrop />} impotent={impotent} text="Hard Drop" />
       </div>
     </div>
   );
@@ -149,7 +152,7 @@ export function TetrisBoard() {
 
   useEffect(() => {
     window.addEventListener("resize", resizeWidth);
-    return () => window.addEventListener("resize", resizeWidth);
+    return () => window.removeEventListener("resize", resizeWidth);
   }, []);
   /*eslint-enable*/
 
