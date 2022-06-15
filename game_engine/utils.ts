@@ -452,7 +452,7 @@ async function startGame({
 }: StartFnArgs) {
   if (game.new) prepareGame(setGameState, setGameInfo);
   await startCountDown(setCountDown);
-  // GameEvent.emit("started");
+  GameEvent.emit("started");
 
   function run(timestamp: number) {
     if (game.state === "playing") {

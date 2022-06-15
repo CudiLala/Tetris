@@ -183,7 +183,7 @@
   align-content: center;
   padding: 1rem;
   flex: 1;
-  height: 80%;
+  height: 75%;
 }
 
 .tetrisboard div {
@@ -194,7 +194,7 @@
   display: flex;
   width: 100%;
   margin: 0 auto;
-  height: 20%;
+  height: 25%;
 }
 .showboard .nextTile {
   display: grid;
