@@ -63,13 +63,16 @@ function handleRowClear() {
   game.logicBoard = clone(newBoard);
 
   if (fullRows) {
-    game.score += fullRows ** 2 + fullRows * 8 - 1;
+    game.score += 8 * fullRows + (8 * (fullRows - 1)) / 2;
     GameEvent.emit("scored");
   }
 }
 
 function handleTetrominoDownwardMovement(timestamp: number) {
-  if (timestamp - timers.lastDropTime > 700 - (game.level - 1) * 50) {
+  if (
+    timestamp - timers.lastDropTime >
+    100 + Math.floor(7000 / (7 + game.level))
+  ) {
     timers.lastDropTime = timestamp;
     moveTetrominoDown();
   }
@@ -328,7 +331,7 @@ function prepareGame(
   GameEvent.subscribe(
     "scored",
     () => {
-      if (game.score > game.level * 20) {
+      if (game.score > game.level ** 2 * 20) {
         game.level++;
         game.state = "level change";
         setGameState("level change");
