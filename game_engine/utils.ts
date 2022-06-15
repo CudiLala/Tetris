@@ -32,6 +32,13 @@ function createTetromino() {
   return { type, rotation, color };
 }
 
+function dropTetromino() {
+  for (let i = 0; i < 2; i++) {
+    if (isBlockedDown()) break;
+    cursor.y++;
+  }
+}
+
 function generateEmptyBoard(width: number, height: number): number[][] {
   return new Array(height).fill(0).map((e) => new Array(width).fill(0));
 }
@@ -66,6 +73,10 @@ function handleTetrominoDownwardMovement(timestamp: number) {
     timers.lastDropTime = timestamp;
     moveTetrominoDown();
   }
+}
+
+function hardDropTetromino() {
+  while (!isBlockedDown()) cursor.y++;
 }
 
 function isBlocked(tetromino: tetromino, cursorX: number, cursorY: number) {
@@ -414,7 +425,8 @@ function runKeyControls(e: KeyboardEvent) {
     if (e.key === "ArrowDown") rotateTetrominoAntiClockwise();
     if (e.key === "ArrowUp") rotateTetrominoClockwise();
     if (e.key === "ArrowRight") moveTetrominoRight();
-    if (e.key === " ") pauseGame();
+    if (!e.shiftKey && e.key === " ") hardDropTetromino();
+    if (e.shiftKey && e.key === " ") dropTetromino();
   }
 }
 
@@ -424,6 +436,8 @@ function runMouseControls(text: arrowText) {
     if (text === "L/Rotate") rotateTetrominoAntiClockwise();
     if (text === "R/Rotate") rotateTetrominoClockwise();
     if (text === "Right") moveTetrominoRight();
+    if (text === "Drop") dropTetromino();
+    if (text === "Hard Drop") hardDropTetromino();
   }
 }
 
@@ -452,7 +466,7 @@ async function startGame({
 }: StartFnArgs) {
   if (game.new) prepareGame(setGameState, setGameInfo);
   await startCountDown(setCountDown);
-  // GameEvent.emit("started");
+  GameEvent.emit("started");
 
   function run(timestamp: number) {
     if (game.state === "playing") {
