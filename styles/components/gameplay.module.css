@@ -96,12 +96,12 @@
 }
 
 .controls .impotent .arrow {
-  height: 4rem;
+  height: 3rem;
 }
 
 .controls .arrow {
-  height: 3rem;
-  width: 3rem;
+  height: 3.5rem;
+  width: 3.5rem;
 }
 .controls .text {
   font-size: 1.6rem;
@@ -251,4 +251,11 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+@media screen and (max-height: 600) {
+  .controls .arrow {
+    width: 3rem;
+    height: 3rem;
+  }
 }

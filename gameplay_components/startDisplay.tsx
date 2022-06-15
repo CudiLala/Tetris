@@ -13,8 +13,6 @@ export default function StartDisplay({ visible }: { visible: boolean }) {
     <div className={className}>
       <BestToday />
       <div className={styles.spacer} />
-      <Instruction />
-      <div className={styles.spacer} />
       <div className={styles.actionButtonsBox}>
         <button
           className={`${styles.button} t-carter`}
@@ -23,6 +21,8 @@ export default function StartDisplay({ visible }: { visible: boolean }) {
           Start Game
         </button>
       </div>
+      <div className={styles.spacer} />
+      <Instruction />
     </div>
   );
 }
