@@ -23,7 +23,8 @@
 }
 
 .startDisplay,
-.gameDisplay {
+.gameDisplay,
+.pauseDisplay {
   width: 100%;
   max-width: 420px;
 }
@@ -50,12 +51,12 @@
   flex-grow: 1;
 }
 
-.instruction .text {
+.text {
   font-size: 2rem;
   line-height: 3rem;
   text-align: center;
 }
-.instruction .smallText {
+.smallText {
   font-size: 1.6rem;
 }
 
@@ -102,6 +103,7 @@
 .controls .arrow {
   height: 3.5rem;
   width: 3.5rem;
+  color: white;
 }
 .controls .text {
   font-size: 1.6rem;
@@ -121,12 +123,13 @@
   align-items: center;
 }
 .actionButtonsBox > .button {
-  font-size: 3rem;
+  font-size: 2.2rem;
+  line-height: 2.5rem;
   background-color: transparent;
   color: white;
   border-radius: 0.4rem;
   transition: all 300ms;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
 }
 .actionButtonsBox > .button:hover {
   color: rgba(255, 255, 255, 0.8);
@@ -145,23 +148,19 @@
   background-color: var(--color-white-glass-one);
 }
 .gameboard div.red {
-  background-color: rgb(255, 80, 109);
+  background-color: rgb(255, 175, 175);
 }
 .gameboard div.green {
-  background-color: rgb(44, 207, 93);
+  background-color: rgb(67, 250, 122);
 }
 .gameboard div.blue {
-  background-color: rgb(44, 202, 207);
+  background-color: rgb(133, 200, 255);
 }
 .gameboard div.purple {
-  background-color: rgb(195, 106, 255);
+  background-color: rgb(255, 147, 237);
 }
 .gameboard div.orange {
-  background-color: rgb(255, 142, 66);
-}
-.gameboard div.white {
-  background-color: rgb(200, 200, 200);
-  transition: all 300ms;
+  background-color: rgb(255, 242, 129);
 }
 
 .gameboard .countdown {
@@ -251,6 +250,16 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.pauseDisplay .gameInfoBox {
+  display: flex;
+  justify-content: space-between;
+  color: rgb(67, 250, 122);
+}
+
+.pauseDisplay .gameInfoBox > * {
+  padding: 0 1rem;
 }
 
 @media screen and (max-width: 420px) {

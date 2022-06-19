@@ -45,4 +45,5 @@ export {
   pauseGame,
   runMouseControls,
   generateEmptyBoard,
+  resetGame,
 } from "./utils";

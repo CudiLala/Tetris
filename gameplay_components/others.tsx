@@ -255,3 +255,25 @@ export function MuteButton() {
     </button>
   );
 }
+
+export function GameButton({
+  children = "",
+  passProps = {},
+}: {
+  children?: string;
+  passProps?: React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >;
+}) {
+  return (
+    <div className={styles.actionButtonsBox}>
+      <button
+        {...passProps}
+        className={`${styles.button} t-carter ${passProps.className}`}
+      >
+        {children}
+      </button>
+    </div>
+  );
+}

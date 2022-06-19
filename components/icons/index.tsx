@@ -26,7 +26,7 @@ export function GameArrowUp() {
     >
       <path
         d="M40 1102.36L840 40L1640 1102.36L1073.5 1020.5L1228.86 1640L840 1565.3L451.139 1640L612 1020.5L40 1102.36Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -45,7 +45,7 @@ export function GameArrowLeft() {
     >
       <path
         d="M1102.36 1640L40 840L1102.36 40L1020.5 606.5L1640 451.139L1565.3 840L1640 1228.86L1020.5 1068L1102.36 1640Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -64,7 +64,7 @@ export function GameArrowRight() {
     >
       <path
         d="M577.637 1640L1640 840L577.637 40L659.5 606.5L40 451.139L114.697 840L40 1228.86L659.5 1068L577.637 1640Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -83,7 +83,7 @@ export function GameArrowDown() {
     >
       <path
         d="M40 577.637L840 1640L1640 577.637L1073.5 659.5L1228.86 40L840 114.697L451.139 40L612 659.5L40 577.637Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -102,7 +102,7 @@ export function GameHardDrop() {
     >
       <path
         d="M726 843.5L385.5 781.5L844.5 1383L1319 781.5L952.5 843.5M744.5 597L639 212L837.5 255.5L1034 212L938 597M840 1640L40 577.637L612 659.5L451.139 40L840 114.697L1228.86 40L1073.5 659.5L1640 577.637L840 1640Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -121,7 +121,7 @@ export function GameRotateClockwise() {
     >
       <path
         d="M996.238 897.069L1640 496.555L996.238 40V272.391L853.887 266.239C404.39 266.239 40 573.766 40 953.119C40 1332.47 404.39 1640 853.887 1640H1194.8V1262.11L853.887 1266.98C648.252 1266.98 481.552 1126.28 481.552 952.72C481.552 779.157 648.252 638.457 853.887 638.457L996.238 632.802V897.069Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />
@@ -140,7 +140,7 @@ export function GameRotateAntiClockWise() {
     >
       <path
         d="M683.762 897.069L40 496.555L683.762 40V272.391L826.113 266.239C1275.61 266.239 1640 573.766 1640 953.119C1640 1332.47 1275.61 1640 826.113 1640H485.199V1262.11L826.113 1266.98C1031.75 1266.98 1198.45 1126.28 1198.45 952.72C1198.45 779.157 1031.75 638.457 826.113 638.457L683.762 632.802V897.069Z"
-        stroke="white"
+        stroke="currentcolor"
         strokeWidth="80"
         strokeLinejoin="round"
       />

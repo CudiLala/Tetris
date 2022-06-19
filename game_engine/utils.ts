@@ -286,10 +286,17 @@ function pauseGame() {
   GameEvent.emit("paused");
 }
 
-function prepareGame(
-  setGameState: StartFnArgs["setGameState"],
-  setGameInfo: StartFnArgs["setGameInfo"]
-) {
+function prepareGame({
+  setGameState,
+  setGameInfo,
+  tetrisBoard,
+  nextTileBoard,
+}: {
+  setGameState: StartFnArgs["setGameState"];
+  setGameInfo: StartFnArgs["setGameInfo"];
+  tetrisBoard: StartFnArgs["tetrisBoard"];
+  nextTileBoard: StartFnArgs["nextTileBoard"];
+}) {
   game.currentPiece = createTetromino();
   game.nextPiece = createTetromino();
   game.new = false;
@@ -352,6 +359,20 @@ function prepareGame(
       cancelAnimationFrame(timers.animationId);
     },
     "end event"
+  );
+
+  GameEvent.subscribe(
+    "restart",
+    () => {
+      game.state = "ended";
+      unsubscribeFromEvents();
+      resetGame();
+      setGameState("playing");
+      setGameInfo({ score: 0, level: 1 });
+      cancelAnimationFrame(timers.animationId);
+      paintBoardsToDOM(tetrisBoard, nextTileBoard);
+    },
+    "restart event"
   );
 
   window.addEventListener("keydown", runKeyControls);
@@ -467,7 +488,8 @@ async function startGame({
   setGameState,
   setGameInfo,
 }: StartFnArgs) {
-  if (game.new) prepareGame(setGameState, setGameInfo);
+  if (game.new)
+    prepareGame({ nextTileBoard, tetrisBoard, setGameState, setGameInfo });
   await startCountDown(setCountDown);
   GameEvent.emit("started");
 
@@ -493,4 +515,10 @@ function unsubscribeFromEvents() {
   window.removeEventListener("keydown", runKeyControls);
 }
 
-export { startGame, pauseGame, runMouseControls, generateEmptyBoard };
+export {
+  startGame,
+  pauseGame,
+  runMouseControls,
+  generateEmptyBoard,
+  resetGame,
+};
