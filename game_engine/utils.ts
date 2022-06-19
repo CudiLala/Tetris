@@ -302,6 +302,7 @@ function prepareGame({
   game.new = false;
 
   resetCursor();
+  setGameInfo({ score: 0, level: 1 });
 
   GameEvent.subscribe(
     "started",
@@ -356,7 +357,6 @@ function prepareGame({
       cancelAnimationFrame(timers.animationId);
       resetGame();
       setGameState("ended");
-      setGameInfo({ score: 0, level: 1 });
       paintLogicBoard();
       paintNextTileBoard();
       paintBoardsToDOM(tetrisBoard, nextTileBoard);
@@ -372,7 +372,6 @@ function prepareGame({
       cancelAnimationFrame(timers.animationId);
       resetGame();
       setGameState("playing");
-      setGameInfo({ score: 0, level: 1 });
       paintLogicBoard();
       paintNextTileBoard();
       paintBoardsToDOM(tetrisBoard, nextTileBoard);

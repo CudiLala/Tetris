@@ -24,7 +24,8 @@
 
 .startDisplay,
 .gameDisplay,
-.pauseDisplay {
+.pauseDisplay,
+.levelChangeDisplay {
   width: 100%;
   max-width: 420px;
 }
@@ -260,6 +261,24 @@
 
 .pauseDisplay .gameInfoBox > * {
   padding: 0 1rem;
+}
+
+.levelChangeDisplay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70vh;
+  width: 100%;
+}
+.levelChangeDisplay .text {
+  font-size: 3rem;
+  line-height: 5rem;
+}
+.levelChangeDisplay .level {
+  color: white;
+}
+.levelChangeDisplay .spacer {
+  margin: 1.5rem 0;
 }
 
 @media screen and (max-width: 420px) {
