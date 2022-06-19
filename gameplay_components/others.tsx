@@ -64,7 +64,7 @@ export function Instruction() {
         The left and right arrow keys for moving tetrominoes. <br />
         The up and down arrow keys for clockwise and anti-clockwise rotation.
         <br />
-        The SpaceBar for hard drop and Alt+SpaceBar for a drop
+        The SpaceBar for hard drop and Shift+SpaceBar for a drop
       </div>
     </div>
   );

@@ -14,8 +14,10 @@ export default function PauseDisplay({ visible }: { visible: boolean }) {
     visible ? styles.visible : styles.invisible
   }`;
   return (
-    <div className={className}>
-      <div className={`${styles.text} t-thin`}>Paused</div>
+    <div className={className} style={{ paddingTop: "1rem" }}>
+      <div className={`${styles.text} t-xlight`} style={{ fontSize: "2.5rem" }}>
+        Paused
+      </div>
       <div className={styles.spacer} />
       <div className={`${styles.gameInfoBox} t-mono`}>
         <div className={styles.score}>Score:&ensp;{gameInfo.score}</div>
@@ -28,8 +30,6 @@ export default function PauseDisplay({ visible }: { visible: boolean }) {
       <GameButton passProps={{ onClick: () => GameEvent.emit("restart") }}>
         Restart
       </GameButton>
-      <div className={styles.spacer} />
-      <Instruction />
     </div>
   );
 }
