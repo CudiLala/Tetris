@@ -326,11 +326,11 @@ function prepareGame({
     "dropped",
     () => {
       handleRowClear();
-      handleGameOver();
       storeLogicBoard();
       resetCursor();
       reloadTile();
       paintNextTileBoard();
+      handleGameOver();
     },
     "drop event"
   );
@@ -353,10 +353,13 @@ function prepareGame({
     () => {
       game.state = "ended";
       unsubscribeFromEvents();
+      cancelAnimationFrame(timers.animationId);
       resetGame();
       setGameState("ended");
       setGameInfo({ score: 0, level: 1 });
-      cancelAnimationFrame(timers.animationId);
+      paintLogicBoard();
+      paintNextTileBoard();
+      paintBoardsToDOM(tetrisBoard, nextTileBoard);
     },
     "end event"
   );
@@ -366,10 +369,12 @@ function prepareGame({
     () => {
       game.state = "ended";
       unsubscribeFromEvents();
+      cancelAnimationFrame(timers.animationId);
       resetGame();
       setGameState("playing");
       setGameInfo({ score: 0, level: 1 });
-      cancelAnimationFrame(timers.animationId);
+      paintLogicBoard();
+      paintNextTileBoard();
       paintBoardsToDOM(tetrisBoard, nextTileBoard);
     },
     "restart event"
