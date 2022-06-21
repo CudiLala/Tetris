@@ -118,6 +118,14 @@
   background-color: var(--color-white-glass-two);
 }
 
+.doubleSpacer {
+  width: 100%;
+  height: 5px;
+  margin: 0.5rem 0;
+  border-top: 1px solid var(--color-white-glass-two);
+  border-bottom: 1px solid var(--color-white-glass-two);
+}
+
 .actionButtonsBox {
   display: flex;
   flex-direction: column;
@@ -253,21 +261,12 @@
   line-height: 2rem;
 }
 
-.pauseDisplay .gameInfoBox {
-  display: flex;
-  justify-content: space-between;
-  color: rgb(67, 250, 122);
-}
-
-.pauseDisplay .gameInfoBox > * {
-  padding: 0 1rem;
-}
-
-.levelChangeDisplay {
+.levelChangeDisplay,
+.pauseDisplay {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 70vh;
+  min-height: 70vh;
   width: 100%;
 }
 .levelChangeDisplay .text {
@@ -279,6 +278,20 @@
 }
 .levelChangeDisplay .spacer {
   margin: 1.5rem 0;
+}
+
+.pauseDisplay .gameInfoBox {
+  display: flex;
+  justify-content: space-between;
+  color: rgb(133, 200, 255);
+}
+
+.pauseDisplay .gameInfoBox > * {
+  padding: 0 1rem;
+}
+
+.pauseDisplay .color {
+  color: rgb(133, 200, 255);
 }
 
 @media screen and (max-width: 420px) {

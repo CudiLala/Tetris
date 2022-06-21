@@ -43,10 +43,6 @@ function generateEmptyBoard(width: number, height: number): number[][] {
   return new Array(height).fill(0).map((e) => new Array(width).fill(0));
 }
 
-function handleGameOver() {
-  if (isGameOver()) GameEvent.emit("ended");
-}
-
 function handleRowClear() {
   let fullRows = 0;
   const newBoard: number[][] = [];
@@ -328,10 +324,10 @@ function prepareGame({
     () => {
       handleRowClear();
       storeLogicBoard();
+      if (isGameOver()) return GameEvent.emit("ended");
       resetCursor();
       reloadTile();
       paintNextTileBoard();
-      handleGameOver();
     },
     "drop event"
   );
@@ -377,6 +373,21 @@ function prepareGame({
       paintBoardsToDOM(tetrisBoard, nextTileBoard);
     },
     "restart event"
+  );
+
+  GameEvent.subscribe(
+    "exited",
+    () => {
+      game.state = "to begin";
+      unsubscribeFromEvents();
+      cancelAnimationFrame(timers.animationId);
+      resetGame();
+      setGameState("to begin");
+      paintLogicBoard();
+      paintNextTileBoard();
+      paintBoardsToDOM(tetrisBoard, nextTileBoard);
+    },
+    "exit event"
   );
 
   window.addEventListener("keydown", runKeyControls);

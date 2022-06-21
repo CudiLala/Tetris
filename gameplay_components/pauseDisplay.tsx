@@ -8,15 +8,19 @@ import { GameButton, Instruction } from "./others";
 
 export default function PauseDisplay({ visible }: { visible: boolean }) {
   const [, setGameState] = useContext(gameStateContext);
-  const [gameInfo, setGameInfo] = useContext(gameInfoCotext);
+  const [gameInfo] = useContext(gameInfoCotext);
 
   const className = `${styles.pauseDisplay} ${
     visible ? styles.visible : styles.invisible
   }`;
   return (
     <div className={className} style={{ paddingTop: "1rem" }}>
-      <div className={`${styles.text} t-xlight`} style={{ fontSize: "2.5rem" }}>
-        Paused
+      <div className={styles.doubleSpacer} />
+      <div
+        className={`${styles.text} t-xlight`}
+        style={{ fontSize: "2.5rem", margin: "0.25rem" }}
+      >
+        <p>Paused</p>
       </div>
       <div className={styles.spacer} />
       <div className={`${styles.gameInfoBox} t-mono`}>
@@ -30,6 +34,10 @@ export default function PauseDisplay({ visible }: { visible: boolean }) {
       <GameButton passProps={{ onClick: () => GameEvent.emit("restart") }}>
         Restart
       </GameButton>
+      <GameButton passProps={{ onClick: () => GameEvent.emit("exited") }}>
+        Exit
+      </GameButton>
+      <div className={styles.doubleSpacer} />
     </div>
   );
 }

@@ -11,13 +11,20 @@ export default function StartDisplay({ visible }: { visible: boolean }) {
   }`;
   return (
     <div className={className}>
+      <div className={styles.doubleSpacer} />
+
       <BestToday />
+
       <div className={styles.spacer} />
       <GameButton passProps={{ onClick: () => setGameState("playing") }}>
         Start Game
       </GameButton>
       <div className={styles.spacer} />
+
+      <div className={styles.spacer} style={{ marginTop: "1rem" }} />
       <Instruction />
+
+      <div className={styles.doubleSpacer} style={{ marginTop: "1rem" }} />
     </div>
   );
 }
